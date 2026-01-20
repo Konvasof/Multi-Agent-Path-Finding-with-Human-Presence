@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/sofie/CTU/Bachelor_thesis/Bachelor_projekt/LNS4MAPF/my_code/my_solver/build/cmake_install.cmake",
+		"/Users/sofie/CTU/Bachelor_thesis/Bachelor_projekt/LNS4MAPF/my_code/my_solver/build/third_party_libraries/nativefiledialog-extended/cmake_install.cmake",
+		"/Users/sofie/CTU/Bachelor_thesis/Bachelor_projekt/LNS4MAPF/my_code/my_solver/build/third_party_libraries/nativefiledialog-extended/src/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

@@ -1,0 +1,284 @@
+[
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/Computation.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/Computation.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/Computation.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/Computation.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/ConstraintTable.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/ConstraintTable.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/ConstraintTable.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/ConstraintTable.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/Experiment.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/Experiment.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/Experiment.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/Experiment.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/Instance.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/Instance.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/Instance.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/Instance.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/IterInfo.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/IterInfo.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/IterInfo.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/IterInfo.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/LNS.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/LNS.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/LNS.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/LNS.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/Map.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/Map.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/Map.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/Map.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/SIPP.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/SIPP.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/SIPP.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/SIPP.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/SafeIntervalTable.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/SafeIntervalTable.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/SafeIntervalTable.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/SafeIntervalTable.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/SharedData.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/SharedData.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/SharedData.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/SharedData.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/Solver.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/Solver.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/Solver.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/Solver.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/Visualizer.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/Visualizer.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/Visualizer.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/Visualizer.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/experiment_utils.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiment_utils.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiment_utils.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/experiment_utils.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/src/utils.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/utils.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/utils.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/src/utils.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_draw.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_draw.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_draw.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_draw.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_widgets.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_widgets.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_widgets.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_widgets.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_tables.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_tables.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_tables.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_tables.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_demo.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_demo.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/imgui_demo.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/imgui_demo.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui-sfml/imgui-SFML.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml/imgui-SFML.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml/imgui-SFML.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui-sfml/imgui-SFML.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/backends/imgui_impl_opengl3.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/backends/imgui_impl_opengl3.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui/backends/imgui_impl_opengl3.cpp",
+  "output": "CMakeFiles/MAPF_lib.dir/third_party_libraries/imgui/backends/imgui_impl_opengl3.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/simple_MAPF_solver.dir/src/main.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/main.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/main.cpp",
+  "output": "CMakeFiles/simple_MAPF_solver.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/sipp_pp_experiment.dir/src/experiments/sipp_pp.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/sipp_pp.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/sipp_pp.cpp",
+  "output": "CMakeFiles/sipp_pp_experiment.dir/src/experiments/sipp_pp.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/destroy_experiment.dir/src/experiments/destroy.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/destroy.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/destroy.cpp",
+  "output": "CMakeFiles/destroy_experiment.dir/src/experiments/destroy.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/repair_experiment.dir/src/experiments/repair.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/repair.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/repair.cpp",
+  "output": "CMakeFiles/repair_experiment.dir/src/experiments/repair.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/feasible_experiment.dir/src/experiments/feasible.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/feasible.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/feasible.cpp",
+  "output": "CMakeFiles/feasible_experiment.dir/src/experiments/feasible.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/feasible_restarts_experiment.dir/src/experiments/feasible_restarts.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/feasible_restarts.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/feasible_restarts.cpp",
+  "output": "CMakeFiles/feasible_restarts_experiment.dir/src/experiments/feasible_restarts.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/influence_of_w_experiment.dir/src/experiments/influence_of_w.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/influence_of_w.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/influence_of_w.cpp",
+  "output": "CMakeFiles/influence_of_w_experiment.dir/src/experiments/influence_of_w.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/influence_of_p_experiment.dir/src/experiments/influence_of_p.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/influence_of_p.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/influence_of_p.cpp",
+  "output": "CMakeFiles/influence_of_p_experiment.dir/src/experiments/influence_of_p.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/influence_of_ap_experiment.dir/src/experiments/influence_of_ap.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/influence_of_ap.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/influence_of_ap.cpp",
+  "output": "CMakeFiles/influence_of_ap_experiment.dir/src/experiments/influence_of_ap.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/overall_improvement_experiment.dir/src/experiments/overall_improvement.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/src/experiments/overall_improvement.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/src/experiments/overall_improvement.cpp",
+  "output": "CMakeFiles/overall_improvement_experiment.dir/src/experiments/overall_improvement.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/third_party_libraries/nativefiledialog-extended/src",
+  "command": "/usr/bin/g++  -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -nostdlib -fno-exceptions -fno-rtti -o CMakeFiles/nfd.dir/nfd_gtk.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/nfd_gtk.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/nfd_gtk.cpp",
+  "output": "third_party_libraries/nativefiledialog-extended/src/CMakeFiles/nfd.dir/nfd_gtk.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/constraint_table_tests.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/constraint_table_tests.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/constraint_table_tests.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/constraint_table_tests.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/instance_tests.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/instance_tests.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/instance_tests.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/instance_tests.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/lns_tests.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/lns_tests.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/lns_tests.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/lns_tests.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/safe_interval_table_tests.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/safe_interval_table_tests.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/safe_interval_table_tests.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/safe_interval_table_tests.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/sipp_tests.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/sipp_tests.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/sipp_tests.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/sipp_tests.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/solution_tests.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/solution_tests.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/solution_tests.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/solution_tests.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/test_utils.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/test_utils.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/unit_tests_main.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/unit_tests_main.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/unit_tests_main.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/unit_tests_main.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -DGTEST_HAS_PTHREAD=1 -o CMakeFiles/unit_tests.dir/src/utils_tests.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/utils_tests.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/utils_tests.cpp",
+  "output": "tests/CMakeFiles/unit_tests.dir/src/utils_tests.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/path_conv_bm.dir/src/benchmarks/path_conv_bm.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/benchmarks/path_conv_bm.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/benchmarks/path_conv_bm.cpp",
+  "output": "tests/CMakeFiles/path_conv_bm.dir/src/benchmarks/path_conv_bm.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/path_conv_bm.dir/src/test_utils.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "output": "tests/CMakeFiles/path_conv_bm.dir/src/test_utils.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/vector_operations_bm.dir/src/benchmarks/vector_operations_bm.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/benchmarks/vector_operations_bm.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/benchmarks/vector_operations_bm.cpp",
+  "output": "tests/CMakeFiles/vector_operations_bm.dir/src/benchmarks/vector_operations_bm.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/vector_operations_bm.dir/src/test_utils.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "output": "tests/CMakeFiles/vector_operations_bm.dir/src/test_utils.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/sipp_bm.dir/src/benchmarks/sipp_bm.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/benchmarks/sipp_bm.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/benchmarks/sipp_bm.cpp",
+  "output": "tests/CMakeFiles/sipp_bm.dir/src/benchmarks/sipp_bm.cpp.o"
+},
+{
+  "directory": "/home/chlebajz/Programy/diplomka/my_solver/build/tests",
+  "command": "/usr/bin/g++ -DBOOST_ALL_NO_LIB -DBOOST_FILESYSTEM_DYN_LINK -DBOOST_PROGRAM_OPTIONS_DYN_LINK -DBOOST_REGEX_DYN_LINK -DBOOST_SYSTEM_DYN_LINK -I/home/chlebajz/Programy/diplomka/my_solver/inc -I/home/chlebajz/Programy/diplomka/my_solver/inc/old -I/home/chlebajz/Programy/diplomka/my_solver/tests/inc -I/home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/nativefiledialog-extended/src/include -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries/imgui-sfml -isystem /home/chlebajz/Programy/diplomka/my_solver/third_party_libraries -isystem /usr/include/eigen3  -pthread -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -fopenmp -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/sipp_bm.dir/src/test_utils.cpp.o -c /home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "file": "/home/chlebajz/Programy/diplomka/my_solver/tests/src/test_utils.cpp",
+  "output": "tests/CMakeFiles/sipp_bm.dir/src/test_utils.cpp.o"
+}
+]
