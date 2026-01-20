@@ -1,8 +1,11 @@
 import os
-from data_loader import LogData
-from grid import GridMap
-from path_finder import AStarPathFinder # Změněno z path_finder na pathfinder pro konzistenci
-
+from Person_to_exit_projekt.python.data_loader import LogData
+from Person_to_exit_projekt.python.grid import GridMap
+from Person_to_exit_projekt.python.path_finder import AStarPathFinder # Změněno z path_finder na pathfinder pro konzistenci
+"""
+call: 
+./simple_MAPF_solver -m ../../../MAPF-benchmark/mapf-map/random-32-32-10.map -a ../../../MAPF-benchmark/mapf-scen-random/scen-random/random-32-32-10-random-1.scen -k 20 -n 5 -G false --output_paths "./test"
+"""
 # --- KONFIGURACE SOUBORŮ ---
 MAP_FOLDER = 'maps_exit_person' # Nová složka
 LOG_FOLDER = 'output_paths'

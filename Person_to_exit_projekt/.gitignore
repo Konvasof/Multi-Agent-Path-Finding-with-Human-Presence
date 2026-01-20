@@ -1,0 +1,16 @@
+# --- Python specifika ---
+# Byte-compiled / optimalizované soubory (generují se automaticky při spuštění)
+__pycache__/
+*.py[cod]
+
+# Virtuální prostředí (obsahuje tisíce souborů knihoven, které na Git nepatří)
+venv/
+env/
+.env
+
+# Jupyter Notebook checkpointy (pokud používáš notebooky)
+.ipynb_checkpoints/
+
+# --- VS Code specifika ---
+# Nastavení editoru (každý programátor má jiné, necpeme to ostatním)
+.vscode/

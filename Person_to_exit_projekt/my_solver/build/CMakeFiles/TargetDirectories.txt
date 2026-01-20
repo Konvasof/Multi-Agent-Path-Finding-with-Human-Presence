@@ -1,0 +1,3 @@
+/Users/sofie/CTU/Bachelor_thesis/Bachelor_projekt/Person_to_exit_projekt/my_solver/build/CMakeFiles/MyMapfSolver.dir
+/Users/sofie/CTU/Bachelor_thesis/Bachelor_projekt/Person_to_exit_projekt/my_solver/build/CMakeFiles/edit_cache.dir
+/Users/sofie/CTU/Bachelor_thesis/Bachelor_projekt/Person_to_exit_projekt/my_solver/build/CMakeFiles/rebuild_cache.dir

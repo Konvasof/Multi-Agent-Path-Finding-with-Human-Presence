@@ -3,49 +3,43 @@ Author: Sofie Konvalinová
 Date: 18-11-2025
 Email: konvasof@cvut.cz
 Description:
-    Modul pro Generování a Inicializaci Mapy. 
-    Načítá statickou mapu a umisťuje startovní pozici pro člověka ('!') 
-    a cílový exit ('X') na volné místo na okraji mapy. Ukládá upravenou mapu pro simulaci.
+    Map RE-Generation and Initialization Module.
+    Loads the static map structure and automates the placement of the agent's 
+    start position ('!') and the target exit ('X').
+Terminal Usage:
+    python main.py my_custom_map.map --input_dir maps/maze-32-32-2.map --output_dir maps_exit_person/maze-32-32-2_exit_person.map
  """
 
-import os # pro manipulaci s cestami k souborům
-import random # pro náhodný výběr pozic
-import sys  # pro manipulaci s cestami
-from grid import GridMap 
+import os 
+import random 
+import sys  
+import argparse # taking arguments from terminal
+from Person_to_exit_projekt.python.grid import GridMap 
 
-MAP_FOLDER = 'maps'
-OUTPUT_FOLDER = 'maps_exit_person'
-# Definujeme soubor, který má být zpracován
-DEFAULT_INPUT_FILENAME = 'maze-32-32-2.map' 
+MAP_FOLDER = 'maps' # if not specified in terminal arguments
+OUTPUT_FOLDER = 'maps_exit_person' # if not specified in terminal arguments
 
 def load_file_content(folder, filename):
-    # Pomocná funkce pro bezpečné načtení obsahu souboru. Sestaví cestu a ověří existenci.
-
+    """Helper function to safely load file content."""
     base_dir = os.path.dirname(os.path.abspath(__file__))
     full_path = os.path.join(base_dir, folder, filename)
     
     if not os.path.exists(full_path):
-        # Přesná cesta k souboru je důležitá pro debugování
-        raise FileNotFoundError(f"Soubor nenalezen: {full_path}")
-        
+        raise FileNotFoundError(f"File not found: {full_path}")       
     with open(full_path, 'r', encoding='utf-8') as f:
         return f.read()
-
 
 class MapModifier:
     
     def __init__(self, raw_map_content: str, input_filename: str):
-        # Inicializace s načtenou mapou
         self.raw_map_content = raw_map_content
         self.input_filename = input_filename
-        # Vytvoření instance GridMap pro kontrolu průchodnosti
         self.grid = GridMap(raw_map_content)
-        # Místa pro člověka a exit
         self.human_pos = None
         self.exit_pos = None
 
     def find_random_walkable_spot(self):
-        # Najde náhodnou volnou buňku, kde není zeď TODO: optimalizovat výběr
+        """ Scans the entire grid to identify all walkable coordinates and randomly returns coordinates."""
         walkable_spots = []
         for y in range(self.grid.height):
             for x in range(self.grid.width):
@@ -53,11 +47,12 @@ class MapModifier:
                      walkable_spots.append((x, y))
         
         if not walkable_spots:
-            raise RuntimeError("Na mapě nebylo nalezeno žádné volné místo!")
-            
+            raise RuntimeError("No walkable spots found on the map!")     
+              
         return random.choice(walkable_spots)
 
     def find_random_edge_spot(self):
+        """Finds a random walkable cell on the perimeter of the map."""
         # Najde náhodnou volnou buňku na okraji mapy TODO: optimalizovat výběr
         edge_spots = []
         for y in range(self.grid.height):
@@ -69,7 +64,7 @@ class MapModifier:
                     edge_spots.append((x, y))
 
         if not edge_spots:
-            raise RuntimeError("Na okraji mapy nebylo nalezeno žádné volné místo!")
+            raise RuntimeError("No walkable cell on the perimeter of the map.")
         
         return random.choice(edge_spots)
 
@@ -133,27 +128,37 @@ class MapModifier:
         return self.human_pos, self.exit_pos, new_filename
 
 if __name__ == "__main__":
+    # 1. Definice argumentů příkazové řádky
+    parser = argparse.ArgumentParser(description="Map Generator: Adds Agent (!) and Exit (X) to a map.")
     
+    # Povinný argument: jméno souboru
+    parser.add_argument("filename", type=str, help="Name of the input map file (e.g., berlin_1_256.map)")
+    
+    # Volitelné argumenty: složky (mají defaultní hodnoty)
+    parser.add_argument("--input_dir", type=str, default=MAP_FOLDER, help="Folder containing input maps")
+    parser.add_argument("--output_dir", type=str, default=OUTPUT_FOLDER, help="Folder for saving modified maps")
+
+    # Zpracování argumentů
+    args = parser.parse_args()
+    input_filename: str = args.filename
+    input_dir: str = args.input_dir
+    output_dir: str = args.output_dir
     # Načtení dat
     try:
-        raw_content = load_file_content(MAP_FOLDER, DEFAULT_INPUT_FILENAME)
+        raw_content = load_file_content(input_dir, input_filename)
     except FileNotFoundError as e:
-        print(f"Chyba při spuštění: {e}")
-        print(f"Ujistěte se, že soubor '{DEFAULT_INPUT_FILENAME}' je ve složce '{MAP_FOLDER}/'.")
+        print(f"Error: {e}")
+        print(f"Check if '{input_filename}' exists in '{input_dir}/'.")
         sys.exit(1)
     
     # Inicializace a generování
     try:
-        modifier = MapModifier(raw_content, DEFAULT_INPUT_FILENAME)
-        
-        print(f"--- START: Generování mapy z '{DEFAULT_INPUT_FILENAME}' ---")
-
-        human_pos, exit_pos, new_filename = modifier.generate_and_save()
-        
-        print(f"\n Mapa úspěšně uložena do: {OUTPUT_FOLDER}/{new_filename}")
-        print(f"   Pozice Člověk ('!'): {human_pos}")
-        print(f"   Pozice Exit ('X'): {exit_pos}")
-        
+        modifier = MapModifier(raw_content, input_filename)
+        print(f"--- START: Generating map from '{input_filename}' ---")
+        human_pos, exit_pos, new_filename = modifier.generate_and_save(output_folder=output_dir)
+        print(f"\n Map successfully saved to: {output_dir}/{new_filename}")
+        print(f"   Human Position ('!'): {human_pos}")
+        print(f"   Exit Position ('X'):  {exit_pos}")       
     except RuntimeError as e:
         print(f"\nCHYBA GENERÁTORU: {e}")
         sys.exit(1)

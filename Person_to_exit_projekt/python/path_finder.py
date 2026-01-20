@@ -2,7 +2,7 @@
 import heapq
 from typing import List, Tuple, Set, Optional
 # Importujeme jen pro type hinting, v běhu to bude instance předaná jako argument
-from grid import GridMap 
+from Person_to_exit_projekt.python.grid import GridMap 
 
 class AStarPathFinder:
     """

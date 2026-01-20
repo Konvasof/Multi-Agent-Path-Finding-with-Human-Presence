@@ -3,36 +3,31 @@ Author: Sofie Konvalinová
 Date: 18-11-2025
 Email: konvasof@cvut.cz
 Description:
-    Unit testy pro třídu GridMap, modul grid.py
+    Unit tests for class GridMap in modul grid.py
  """
 
-import sys # pro manipulaci se systémovými cestami
-import os # pro manipulaci s cestami k souborům
-import unittest # modul pro tvorbu unit testů
+import sys 
+import os 
+import unittest # modul for unit testing
 
-# Získáme cestu k aktuálnímu souboru (test_grid.py)
 current_dir = os.path.dirname(os.path.abspath(__file__))
-# Získáme cestu k rodičovské složce (Person_to_exit_projekt)
 parent_dir = os.path.dirname(current_dir)
-# Přidáme rodičovskou složku do systémové cesty, aby Python viděl grid.py
-sys.path.append(parent_dir)
+sys.path.append(parent_dir) # parent directory to see
 
-# Chci importovat GridMap z grid.py pro oveření
-from grid import GridMap
+from Person_to_exit_projekt.python.grid import GridMap
 
 class TestGridMap(unittest.TestCase):
 
     def setUp(self):
-        # Vytvoříme malou testovací mapu 4x4
         self.raw_map = """type octile
-height 4
-width 4
-map
-@..@
-....
-.@@.
-....
-"""
+                          height 4
+                          width 4
+                          map
+                          @..@
+                          ....
+                          .@@.
+                          ....
+                      """
         self.grid = GridMap(self.raw_map)
 
     def test_dimensions(self):

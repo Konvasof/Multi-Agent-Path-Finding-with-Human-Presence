@@ -7,8 +7,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from grid import GridMap
-from path_finder import AStarPathFinder
+from Person_to_exit_projekt.python.grid import GridMap
+from Person_to_exit_projekt.python.path_finder import AStarPathFinder
 
 class TestAStar(unittest.TestCase):
 

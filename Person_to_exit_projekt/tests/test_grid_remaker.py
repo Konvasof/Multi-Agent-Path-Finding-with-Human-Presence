@@ -9,8 +9,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from grid_remaker import MapModifier
-from grid import GridMap # Potřebujeme GridMap k setupu
+from Person_to_exit_projekt.python.grid_remaker import MapModifier
+from Person_to_exit_projekt.python.grid import GridMap # Potřebujeme GridMap k setupu
 
 # Testovací vstup, který použijeme (4x4)
 TEST_MAP_CONTENT = """type octile
