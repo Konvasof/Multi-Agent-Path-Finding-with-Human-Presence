@@ -84,17 +84,30 @@ void LNS::solve()
   // 0. Pre-computation: Calculate human path if needed
   if (human_start_location != -1 && safety_exit_location != -1)
   {
-      std::cout << "Calculating optimized human path..." << std::endl;
-      // Vyčistíme tabulku překážek, aby člověk "neviděl" roboty (má prioritu)
-      auto human_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
-      
-      // Voláme SIPP pro nalezení cesty člověka
-      human_path_locations = human_planner->find_shortest_path(human_start_location, safety_exit_location);
-      
-      if (human_path_locations.empty()) {
-          std::cout << "WARNING: Human cannot reach the exit from start location!" << std::endl;
-      } else {
-          std::cout << "Human path calculated. Length: " << human_path_locations.size() << std::endl;
+      if (settings.human_use_sipp) 
+      {
+          std::cout << "Calculating human path using SIPP_suboptimal..." << std::endl;
+          
+          auto human_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
+          
+          // Voláme naši novou funkci
+          TimePointPath human_tp_path = human_planner->plan_human_suboptimal(
+              human_start_location, 
+              safety_exit_location, 
+              settings.sipp_settings.w // Použijeme nastavené w
+          );
+
+          // Uložení cesty pro vizualizaci
+          human_path_locations.clear();
+          if (human_tp_path.empty()) {
+             std::cout << "WARNING: Human cannot reach the exit!" << std::endl;
+          } else {
+             std::cout << "Human path found via SIPP. Length: " << human_tp_path.size() << std::endl;
+             // Převod TimePointPath na seznam lokací
+             for(const auto& tp : human_tp_path) {
+                 human_path_locations.push_back(tp.location);
+             }
+          }
       }
   }
 

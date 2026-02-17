@@ -76,6 +76,7 @@ public:
   Destroy_settings destroy_settings; /**< Settings for the destroy operator. */
   SIPP_settings    sipp_settings;    /**< Settings for the SIPP algorithm. */
   bool             restarts;         /**< Whether to use restarts. */
+  bool             human_use_sipp = true; /**< Switch to enable/disable SIPP usage for a human. */
 };
 
 /**

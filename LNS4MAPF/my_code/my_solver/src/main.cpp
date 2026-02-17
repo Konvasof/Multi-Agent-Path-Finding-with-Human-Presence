@@ -154,28 +154,81 @@ auto main(int argc, char** argv) -> int
   std::string human_file = vm["humanPath"].as<std::string>();
   int safety_door = vm["safetyDoor"].as<int>();
 
+  // If a user provides a starting position, it is loaded from the terminal
   int h_start_x = vm["humanStartX"].as<int>();
   int h_start_y = vm["humanStartY"].as<int>();
   int human_start_loc = -1;
 
+  // If a starting position is not provided, it is generated randomly
   if (h_start_x != -1 && h_start_y != -1) {
+      // Ensuring that the position is inside the map
       if (instance->get_map_data().is_in({h_start_x, h_start_y})) {
            human_start_loc = instance->position_to_location({h_start_x, h_start_y});
+           
+           // Ensuring the user does not send the person into a blocked area
+           if (instance->get_map_data().data[human_start_loc] != 0) {
+               std::cout << "WARNING: User defined human start is on an obstacle/door! Resetting to random." << std::endl;
+               human_start_loc = -1;
+           }
+           // Ensuring the user does not send person on the same position as a starting point of the robot
+           if (human_start_loc != -1) { 
+               const auto& agent_starts = instance->get_start_locations();
+               for (int robot_loc : agent_starts) {
+                   if (robot_loc == human_start_loc) {
+                       std::cout << "WARNING: User defined human start is on a robot! Resetting to random choice." << std::endl;
+                       human_start_loc = -1;
+                       break;
+                   }
+               }
+           }
+      }
+      else {
+          std::cout << "WARNING: User defined coordinates are out of map bounds! Resetting to random choice." << std::endl;
       }
   }
-
-  if (safety_door == -1)
-  {
-    const auto& map_data = instance->get_map_data();
-    for (int i = 0; i < (int)map_data.data.size(); i++)
-    {
-      if (map_data.data[i] == 2) // Hodnota 2 značí dveře v Map.cpp
-      {
-          safety_door = i;
-          // std::cout << "Auto-detected safety door at location: " << i << std::endl;
-          break;
+  // If it's neccesary to make a random position
+  if (human_start_loc == -1) {
+      std::cout << "Generating a random human position..." << std::endl;
+      
+      // Keep a seed 
+      std::mt19937 gen;
+      if (seed == -1) {
+          std::random_device rd;
+          gen.seed(rd());
+      } else {
+          gen.seed(seed + 42); // Not same seed as for agents
       }
-    }
+
+      const auto& map_data = instance->get_map_data();
+      std::uniform_int_distribution<> dist(0, map_data.data.size() - 1);
+      
+      int max_attempts = 10000;
+      bool position_found = false;
+
+      const auto& agent_starts = instance->get_start_locations();
+      std::unordered_set<int> agent_start_set(agent_starts.begin(), agent_starts.end());
+
+      // Iterating throught a map
+      for (int i = 0; i < max_attempts; i++) {
+          int candidate_loc = dist(gen);
+          // Not same as a wall or door
+          if (map_data.data[candidate_loc] == 0) {
+              
+              // Not same as a start of robot
+              if (agent_start_set.find(candidate_loc) == agent_start_set.end()) {
+                  human_start_loc = candidate_loc;
+                  position_found = true;
+                  
+                  auto pos = instance->location_to_position(human_start_loc);
+                  std::cout << "Human spawn set to: [" << pos.x << ", " << pos.y << "] (Location ID: " << human_start_loc << ")" << std::endl;
+                  break;
+              }
+          }
+      }
+
+      if (!position_found) {
+          std::cerr << "ERROR: Failed to generate valid human position after " << max_attempts << " attempts." << std::endl;
+      }
   }
   std::vector<int> human_path_locs;
   if (!human_file.empty())

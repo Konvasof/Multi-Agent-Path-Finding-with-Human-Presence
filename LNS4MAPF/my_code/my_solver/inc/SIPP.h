@@ -250,6 +250,7 @@ public:
   int               expanded_this_iter  = 0; /**< The number of nodes expanded in the current iteration. */
   int               iteration_num       = 0; /**< The current iteration number. */
   SIPPInfo          iter_info;               /**< The iteration information. */
+  TimePointPath plan_human_suboptimal(int start_loc, int goal_loc, double w);
 
   bool check_reachability(int start_loc, int goal_loc, int start_time);
   std::vector<int> find_shortest_path(int start_loc, int goal_loc);
