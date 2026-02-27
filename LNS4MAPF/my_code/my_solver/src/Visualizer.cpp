@@ -195,6 +195,20 @@ void Visualizer::run()
   // the main loop
   while (window.isOpen() && running)
   {
+    if (shared_data.human_path_ready.load(std::memory_order_acquire)) { 
+        human_path_data.clear(); 
+        
+        // Convert Location ID to Point2d
+        for (int loc_id : shared_data.human_path_locations) { 
+            human_path_data.push_back(instance.location_to_position(loc_id)); 
+        } 
+        
+        // Reset the flag so we don't load it again every frame
+        shared_data.human_path_ready.store(false, std::memory_order_release); 
+        
+        // Write to the internal GUI log
+        add_to_log("Loaded new human path: " + std::to_string(human_path_data.size()) + " steps."); 
+    }
     // check whether new paths arrived
     if (solution_vis.is_playing)
     {
@@ -502,7 +516,7 @@ void Visualizer::create_cell_rectangles()
       {
         cell_rectangles[y][x].setFillColor(sf::Color::Black); // Černá zeď
       }
-      else if (cell_value == 2) // --- DVEŘE ---
+      else if (cell_value == 2 || (y * width + x) == shared_data.safety_door_location)
       {
         // A) Podklad (podlaha), aby pod dveřmi nebyla díra
         cell_rectangles[y][x].setFillColor(sf::Color(80, 70, 60)); // Tmavá podlaha

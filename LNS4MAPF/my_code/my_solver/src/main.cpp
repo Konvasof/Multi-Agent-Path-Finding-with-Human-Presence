@@ -230,6 +230,93 @@ auto main(int argc, char** argv) -> int
           std::cerr << "ERROR: Failed to generate valid human position after " << max_attempts << " attempts." << std::endl;
       }
   }
+  if (safety_door == -1) {
+      std::cout << "Searching for safety door ('2') in the map..." << std::endl;
+      const auto& map_data = instance->get_map_data();
+      std::vector<int> door_locations;
+      
+      // Try to find all doors directly from the map
+      for (int i = 0; i < (int)map_data.data.size(); i++) {
+          if (map_data.data[i] == 2) {
+              door_locations.push_back(i);
+          }
+      }
+      
+      if (!door_locations.empty()) {
+          // If there are doors in the map, choose one randomly
+          std::mt19937 gen_door;
+          if (seed == -1) {
+              std::random_device rd;
+              gen_door.seed(rd());
+          } else {
+              gen_door.seed(seed + 99); // Different seed to avoid affecting other random generators
+          }
+          std::uniform_int_distribution<> dist_door(0, door_locations.size() - 1);
+          safety_door = door_locations[dist_door(gen_door)];
+          
+          auto pos = instance->location_to_position(safety_door);
+          std::cout << "Safety door auto-detected at: [" << pos.x << ", " << pos.y << "] (Location ID: " << safety_door << ")" << std::endl;
+      } else {
+          // 2. Fallback: No '2' found in the map, generate a random door on the edge
+          std::cout << "No doors found. Generating a random door position on the edge..." << std::endl;
+          std::mt19937 gen_door;
+          if (seed == -1) {
+              std::random_device rd;
+              gen_door.seed(rd());
+          } else {
+              gen_door.seed(seed + 99);
+          }
+          
+          int width = map_data.width;
+          int height = map_data.height;
+          std::vector<int> valid_edge_doors;
+
+          // Find all cells that are on the edge, not in the corners, and are free (0)
+          for (int y = 0; y < height; y++) {
+              for (int x = 0; x < width; x++) {
+                  bool is_edge = (x == 0 || x == width - 1 || y == 0 || y == height - 1);
+                  bool is_corner = ((x == 0 && y == 0) || (x == 0 && y == height - 1) ||
+                                    (x == width - 1 && y == 0) || (x == width - 1 && y == height - 1));
+                  
+                  if (is_edge && !is_corner) {
+                      int loc = y * width + x;
+                      // Must be free space (0) and not the human's start location
+                      if (map_data.data[loc] == 0 && loc != human_start_loc) {
+                          valid_edge_doors.push_back(loc);
+                      }
+                  }
+              }
+          }
+
+          if (!valid_edge_doors.empty()) {
+              // Pick a random door from the valid edge locations
+              std::uniform_int_distribution<> dist_door(0, valid_edge_doors.size() - 1);
+              safety_door = valid_edge_doors[dist_door(gen_door)];
+              
+              auto pos = instance->location_to_position(safety_door);
+              std::cout << "Random edge safety door generated at: [" << pos.x << ", " << pos.y << "] (Location ID: " << safety_door << ")" << std::endl;
+          } else {
+              // Ultimate fallback in case the map is completely closed off by walls on all edges
+              std::cerr << "WARNING: No free edge locations found! Falling back to any free space..." << std::endl;
+              std::uniform_int_distribution<> dist_map(0, map_data.data.size() - 1);
+              int max_attempts = 10000;
+              bool door_found = false;
+              for (int i = 0; i < max_attempts; i++) {
+                  int candidate_loc = dist_map(gen_door);
+                  if (map_data.data[candidate_loc] == 0 && candidate_loc != human_start_loc) {
+                      safety_door = candidate_loc;
+                      door_found = true;
+                      auto pos = instance->location_to_position(safety_door);
+                      std::cout << "Random fallback safety door generated at: [" << pos.x << ", " << pos.y << "] (Location ID: " << safety_door << ")" << std::endl;
+                      break;
+                  }
+              }
+              if (!door_found) {
+                  std::cerr << "ERROR: Failed to generate valid door position!" << std::endl;
+              }
+          }
+      }
+  } 
   std::vector<int> human_path_locs;
   if (!human_file.empty())
   {
@@ -251,6 +338,7 @@ auto main(int argc, char** argv) -> int
           std::cout << "WARNING: Could not open human path file: " << human_file << std::endl;
       }
   }
+  shared_data->safety_door_location = safety_door;
   computation.set_safety_params(safety_aware, human_start_loc, safety_door);
 
   // start the computation thread
@@ -261,7 +349,7 @@ auto main(int argc, char** argv) -> int
   {
     Visualizer visualizer(*instance, computation, *shared_data, seed + 1);  // use different seed for visualizer than for computation
     //visualizer.start();
-    visualizer.load_human_path("human_path.txt");
+    //visualizer.load_human_path("human_path.txt");
     
     visualizer.run();
     // wait for the visualization thread to finish

@@ -21,6 +21,10 @@ public:
   std::atomic<bool> is_new_info; /**< Flag indicating if new information is available. */
   std::atomic<bool> is_end;      /**< Flag indicating if the solver should end. */
 
+  std::vector<int> human_path_locations;         /**< Saved human path */
+  std::atomic<bool> human_path_ready{false};     /**< Flag, if is a path ready to be read by visualization thread */
+  int safety_door_location = -1; /**< Location ID of the safety door */
+  
   /**
    * @brief Constructor for SharedData.
    */

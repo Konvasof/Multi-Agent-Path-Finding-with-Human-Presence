@@ -81,7 +81,6 @@ void LNS::initialize_constraint_table(const std::vector<TimePointPath>& paths)
 
 void LNS::solve()
 {
-  // 0. Pre-computation: Calculate human path if needed
   if (human_start_location != -1 && safety_exit_location != -1)
   {
       if (settings.human_use_sipp) 
@@ -90,26 +89,34 @@ void LNS::solve()
           
           auto human_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
           
-          // Voláme naši novou funkci
+          // Planning human path with SIPP suboptimal
           TimePointPath human_tp_path = human_planner->plan_human_suboptimal(
               human_start_location, 
               safety_exit_location, 
-              settings.sipp_settings.w // Použijeme nastavené w
+              settings.sipp_settings.w 
           );
 
-          // Uložení cesty pro vizualizaci
+          // Save a path for human in shared data for visualization
           human_path_locations.clear();
           if (human_tp_path.empty()) {
              std::cout << "WARNING: Human cannot reach the exit!" << std::endl;
           } else {
-             std::cout << "Human path found via SIPP. Length: " << human_tp_path.size() << std::endl;
-             // Převod TimePointPath na seznam lokací
-             for(const auto& tp : human_tp_path) {
-                 human_path_locations.push_back(tp.location);
-             }
+            std::cout << "Human path found via SIPP. Length: " << human_tp_path.size() << std::endl;
+            
+            // Copy Location ID to a temporary vector
+            std::vector<int> temp_path;
+            for(const auto& tp : human_tp_path) {
+                temp_path.push_back(tp.location);
+            }
+            
+            // Translation to a shareddata
+            shared_data->human_path_locations = temp_path;
+            
+            // Nesessary for a Visualizer
+            shared_data->human_path_ready.store(true, std::memory_order_release);
           }
-      }
   }
+}
 
   // start measuring time
   Clock clock;
