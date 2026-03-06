@@ -23,6 +23,7 @@ public:
 
   std::vector<int> human_path_locations;         /**< Saved human path */
   std::atomic<bool> human_path_ready{false};     /**< Flag, if is a path ready to be read by visualization thread */
+  std::vector<std::vector<int>> all_time_human_paths; /**< Saved human paths for all iterations, used for evaluation */
   int safety_door_location = -1; /**< Location ID of the safety door */
   
   /**

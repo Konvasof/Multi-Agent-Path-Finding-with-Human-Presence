@@ -81,48 +81,10 @@ void LNS::initialize_constraint_table(const std::vector<TimePointPath>& paths)
 
 void LNS::solve()
 {
-  if (human_start_location != -1 && safety_exit_location != -1)
-  {
-      if (settings.human_use_sipp) 
-      {
-          std::cout << "Calculating human path using SIPP_suboptimal..." << std::endl;
-          
-          auto human_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
-          
-          // Planning human path with SIPP suboptimal
-          TimePointPath human_tp_path = human_planner->plan_human_suboptimal(
-              human_start_location, 
-              safety_exit_location, 
-              settings.sipp_settings.w 
-          );
-
-          // Save a path for human in shared data for visualization
-          human_path_locations.clear();
-          if (human_tp_path.empty()) {
-             std::cout << "WARNING: Human cannot reach the exit!" << std::endl;
-          } else {
-            std::cout << "Human path found via SIPP. Length: " << human_tp_path.size() << std::endl;
-            
-            // Copy Location ID to a temporary vector
-            std::vector<int> temp_path;
-            for(const auto& tp : human_tp_path) {
-                temp_path.push_back(tp.location);
-            }
-            
-            // Translation to a shareddata
-            shared_data->human_path_locations = temp_path;
-            
-            // Nesessary for a Visualizer
-            shared_data->human_path_ready.store(true, std::memory_order_release);
-          }
-  }
-}
-
-  // start measuring time
   Clock clock;
   clock.start();
 
-  // calculate initial solution
+  // 1. Calculate initial solution
   while (!found_initial_solution && clock.get_current_time().first < settings.time_limit)
   {
     found_initial_solution = find_initial_solution();
@@ -148,12 +110,13 @@ void LNS::solve()
   assertm(found_initial_solution, "Could not find the initial solution");
   assertm(solution.is_valid(instance), "Found invalid solution");
 
-  // initialize the constraint table (needed for randomwalk and intersection destroy operator)
+  // 2. Initialize the constraint table (needed for randomwalk and intersection destroy operator)
   if (settings.destroy_settings.type != DESTROY_TYPE::RANDOM)
   {
     initialize_constraint_table(solution.paths);
   }
 
+  // --- 3. MAIN LNS LOOP ---
   while (iteration_num < settings.max_iter && clock.get_current_time().first < settings.time_limit)
   {
     // check for visualization thread end
@@ -170,6 +133,7 @@ void LNS::solve()
     // time the iteration
     Clock iteration_clock;
     iteration_clock.start();
+    
     // copy solution (S_bsf -> S_new)
     Solution perturbed_sol = solution;
 
@@ -181,7 +145,7 @@ void LNS::solve()
 
     bool safety_violation = false;
     
-    // Safety check běží jen pokud je řešení validní (feasible) a máme zapnutý safety mód
+    // Safety check
     if (perturbed_sol.feasible && safety_aware_mode) 
     {
         if (!validate_safety(perturbed_sol)) 
@@ -189,10 +153,10 @@ void LNS::solve()
             safety_violation = true;
         }
     }
+
     bool accepted    = false;
     int  improvement = 0;
 
-    // Podmínka: Řešení musí být validní (feasible) AND bezpečné (!safety_violation)
     if (!perturbed_sol.feasible || safety_violation)
     {
       // Discard unsafe or infeasible solution
@@ -204,15 +168,13 @@ void LNS::solve()
       perturbed_sol.calculate_cost(instance);
       improvement = solution.sum_of_delays - perturbed_sol.sum_of_delays;
 
-      // Find out which destroy strategy was used (for adaptive weights)
+      // Find out which destroy strategy was used
       auto destroy_strategy_index_help = magic_enum::enum_index<DESTROY_TYPE>(last_destroy_strategy);
       int  destroy_strategy_index      = -1;
       if (destroy_strategy_index_help.has_value())
       {
         destroy_strategy_index = destroy_strategy_index_help.value();
       }
-      assertm(destroy_strategy_index >= 0 && destroy_strategy_index < static_cast<int>(magic_enum::enum_count<DESTROY_TYPE>()),
-              "Wrong destroy strategy index.");
 
       // Check improvement
       if (improvement <= 0)
@@ -253,10 +215,8 @@ void LNS::solve()
     // Logging and Visualization
     auto [iteration_time_wall, iteration_time_cpu] = iteration_clock.end();
 
-    // construct LNS iteration info and add to the shared data
     if (settings.sipp_settings.info_type == INFO_type::visualisation)
     {
-      // get the pointer to the original perturbed solution (which might have been moved)
       Solution* sol = &solution;
       if (!accepted)
       {
@@ -267,7 +227,6 @@ void LNS::solve()
       sipp_info.clear();
       shared_data->update_lns_info(lns_info);
     }
-    // log the iteration
     else if (settings.sipp_settings.info_type == INFO_type::experiment)
     {
       log.bsf_solution_cost.push_back(solution.sum_of_costs);
@@ -276,9 +235,100 @@ void LNS::solve()
       log.iteration_time_wall.push_back(iteration_time_wall);
       log.iteration_time_cpu.push_back(iteration_time_cpu);
     }
+  } // <-- ZDE SPRÁVNĚ KONČÍ HLAVNÍ LNS CYKLUS
+
+  // --- 4. FINAL HUMAN PATH EVALUATION OVER TIME ---
+  // Calculates the human path at each time step and stores it in a vector for clean output.
+  if (human_start_location != -1 && safety_exit_location != -1)
+  {
+      // Vector to store the resulting paths for every time step
+      std::vector<TimePointPath> all_human_paths;
+      
+      int max_t = solution.makespan;
+
+      // 1. Calculate paths silently
+      for (int t = 0; t <= max_t; t++)
+      {
+          int current_human_loc = human_start_location;
+
+          // If the human is already at the exit, push an empty path to represent "arrived"
+          if (current_human_loc == safety_exit_location) {
+              all_human_paths.push_back(TimePointPath());
+              continue; 
+          }
+
+          // Create an independent planner for this time step
+          SIPP temp_human_planner(instance, rnd_generator, settings.sipp_settings);
+
+          for (const auto& robot_path : solution.paths) {
+              if (!robot_path.empty()) {
+                  int robot_loc = -1;
+                  
+                  // Zjistíme, kde přesně robot stojí v čase 't'
+                  for (const auto& tp : robot_path) {
+                      if (tp.interval.t_min <= t && tp.interval.t_max >= t) {
+                          robot_loc = tp.location;
+                          break;
+                      }
+                  }
+                  
+                  // Pokud je robot na mapě, uděláme z jeho aktuálního políčka zeď (od času 0 do INT_MAX)
+                  if (robot_loc != -1) {
+                      TimePoint static_obstacle(robot_loc, TimeInterval(0, INT_MAX));
+                      temp_human_planner.safe_interval_table.add_constraint(static_obstacle);
+                  }
+              }
+          }
+
+          // Calculate and store the path
+          TimePointPath human_tp_path = temp_human_planner.plan_human_suboptimal(
+              current_human_loc, 
+              safety_exit_location, 
+              settings.sipp_settings.w 
+          );
+          
+          all_human_paths.push_back(human_tp_path);
+      }
+
+      // 2. Print the summarized results from the vector
+      std::cout << "\n--- Human Path Evaluation Summary ---" << std::endl;
+      for (int t = 0; t <= max_t; t++)
+      {
+          int current_human_loc = human_start_location;
+
+          if (current_human_loc == safety_exit_location) {
+              std::cout << "[Time " << t << "] Human is at the exit." << std::endl;
+          } else if (all_human_paths[t].empty()) {
+              std::cout << "[Time " << t << "] Human PATH: NOT FOUND! (Blocked)" << std::endl;
+          } else {
+              std::cout << "[Time " << t << "] Human path length: " << all_human_paths[t].size() << std::endl;
+          }
+      }
+      std::cout << "-------------------------------------" << std::endl;
+      
+      // --- 3. Uložení vektoru vektorů pro vizualizaci ---
+      if (!all_human_paths.empty()) {
+          std::vector<std::vector<int>> gui_all_paths;
+          
+          for (const auto& tp_path : all_human_paths) {
+              std::vector<int> single_time_path;
+              // Extract locations. If the path is empty, single_time_path will be correctly empty
+              for (const auto& tp : tp_path) {
+                  single_time_path.push_back(tp.location);
+              }
+              gui_all_paths.push_back(single_time_path);
+          }
+          
+          // Bezpečné uložení do sdílené struktury
+          shared_data->all_time_human_paths = gui_all_paths;
+          
+          // Signalizace vizualizéru, že jsou data připravena ke čtení
+          shared_data->human_path_ready.store(true, std::memory_order_release);
+      }
   }
+  // --- END OF HUMAN PATH EVALUATION ---
   
-  std::cout << "Final solution has sum of costs: " << solution.sum_of_costs << std::endl;
+  std::cout << "Final solution cost: " << solution.sum_of_costs << std::endl;
   print_safety_report();
 }
 
@@ -957,101 +1007,108 @@ void LNS::discard_solution(const Solution& sol, const Solution& prev_sol) const
 bool LNS::validate_safety(const Solution& sol)
 {
   if (!safety_aware_mode) return true; // Baseline mode = vždy bezpečné
-  if (human_path_locations.empty() || safety_exit_location == -1) return true;
+  
+  // Pokud není nastaven start nebo cíl, ignorujeme bezpečnost
+  if (human_start_location == -1 || safety_exit_location == -1) return true;
 
-  auto safety_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
-
-  // 1. Vyčistit tabulku intervalů v planneru (aby byla prázdná)
-  safety_planner->safe_interval_table.reset();
-
-  // 2. Naplnit tabulku cestami VŠECH robotů z nového řešení (sol)
-  // Roboti jsou nyní "statické/dynamické překážky" pro člověka
-  for (const auto& path : sol.paths) {
-      if (!path.empty()) {
-          safety_planner->safe_interval_table.add_constraints(path);
-      }
-  }
-
-  // 3. Projít každý krok cesty člověka a zkusit najít únik
   int makespan = sol.makespan;
-  // Nebo délka cesty člověka, co je delší
-  int check_duration = std::max((int)makespan, (int)human_path_locations.size());
+  int check_duration = makespan + 1; // Kontrolujeme celou dobu pohybu robotů
 
-  for (int t = 0; t < check_duration; t ++) // Optimalizace: Kontroluj třeba každých 5 kroků, ne každý (pro rychlost)
+  for (int t = 0; t < check_duration; t++) 
   {
-      // Kde je člověk v čase t?
-      int current_human_loc;
-      if (t < (int)human_path_locations.size()) {
-          current_human_loc = human_path_locations[t];
-      } else {
-          current_human_loc = human_path_locations.back(); // Zůstává na konci
-      }
+      // Člověk stojí celou dobu pevně na startu
+      int current_human_loc = human_start_location;
       if (current_human_loc == safety_exit_location) continue;
 
-      bool safe = safety_planner->check_reachability(current_human_loc, safety_exit_location, t);
+      // 1. Vytvoříme dočasný plánovač jen pro tento jeden statický snímek
+      auto safety_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
 
-      if (!safe) {
-          //planner->safe_interval_table.reset();
-          return false; 
+      // 2. Zmrazení času - zjistíme pozice robotů PŘESNĚ v čase 't' a vložíme je jako zdi
+      for (const auto& path : sol.paths) {
+          if (!path.empty()) {
+              int robot_loc = -1;
+              for (const auto& tp : path) {
+                  if (tp.interval.t_min <= t && tp.interval.t_max >= t) {
+                      robot_loc = tp.location;
+                      break;
+                  }
+              }
+              // Vložíme robota jako nekonečnou statickou překážku (zeď)
+              if (robot_loc != -1 && robot_loc != safety_exit_location) {
+                  safety_planner->safe_interval_table.add_constraint(TimePoint(robot_loc, TimeInterval(0, INT_MAX)));
+              }
+          }
+      }
+
+      // 3. Zkusíme najít cestu (využijeme náš už existující suboptimal)
+      TimePointPath escape_path = safety_planner->plan_human_suboptimal(
+          current_human_loc, 
+          safety_exit_location, 
+          settings.sipp_settings.w
+      );
+
+      // Pokud v tomto čase cesta neexistuje, roboti člověka zablokovali!
+      if (escape_path.empty()) {
+          return false; // Řešení není bezpečné
       }
   }
 
-  // 4. Úklid
-  //planner->safe_interval_table.reset();
-  return true; // SAFE
+  return true; // Řešení prošlo všemi časy bezpečně
 }
 
 // Vlož na konec LNS.cpp
 void LNS::print_safety_report()
 {
-    // Pokud nemáme člověka nebo dveře, končíme
-    if (human_path_locations.empty() || safety_exit_location == -1) return;
+    if (human_start_location == -1 || safety_exit_location == -1) return;
 
     std::cout << "Running final safety report..." << std::endl;
 
-    auto safety_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
-    safety_planner->safe_interval_table.reset();
-
-    // 1. Reset planneru a přidání finálních cest robotů jako překážek
-    for (const auto& path : solution.paths) {
-        if (!path.empty()) {
-            safety_planner->safe_interval_table.add_constraints(path);
-        }
-    }
-
-    // 2. Příprava pro hledání
     std::vector<int> failed_steps;
-    int check_duration = std::max((int)solution.makespan, (int)human_path_locations.size());
+    int check_duration = solution.makespan + 1;
 
-    // 3. Kontrola každého kroku (t)
     for (int t = 0; t < check_duration; t++) 
     {
-        int current_human_loc;
-        if (t < (int)human_path_locations.size()) {
-            current_human_loc = human_path_locations[t];
-        } else {
-            current_human_loc = human_path_locations.back(); // Člověk čeká v cíli
-        }
+        // Člověk zůstává na startu
+        int current_human_loc = human_start_location;
         if (current_human_loc == safety_exit_location) continue;
 
-        bool safe = safety_planner->check_reachability(current_human_loc, safety_exit_location, t);
+        auto safety_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
 
-        if (!safe) {
+        // Vložíme statické překážky pro čas t
+        for (const auto& path : solution.paths) {
+            if (!path.empty()) {
+                int robot_loc = -1;
+                for (const auto& tp : path) {
+                    if (tp.interval.t_min <= t && tp.interval.t_max >= t) {
+                        robot_loc = tp.location;
+                        break;
+                    }
+                }
+                if (robot_loc != -1 && robot_loc != safety_exit_location) {
+                    safety_planner->safe_interval_table.add_constraint(TimePoint(robot_loc, TimeInterval(0, INT_MAX)));
+                }
+            }
+        }
+
+        TimePointPath escape_path = safety_planner->plan_human_suboptimal(
+            current_human_loc, 
+            safety_exit_location, 
+            settings.sipp_settings.w
+        );
+
+        if (escape_path.empty()) {
             failed_steps.push_back(t);
         }
     }
 
-    // 4. Výpis výsledku
+    // Výpis výsledku
     if (failed_steps.empty()) {
-        std::cout << "Human has path to exit" << std::endl;
+        std::cout << "Human has path to exit at ALL time steps." << std::endl;
     } else {
-        std::cout << "Human has no path to exit at: ";
+        std::cout << "Human has NO path to exit at steps: ";
         for (size_t i = 0; i < failed_steps.size(); i++) {
             std::cout << failed_steps[i] << (i < failed_steps.size() - 1 ? "," : "");
         }
-        std::cout << " steps" << std::endl;
+        std::cout << std::endl;
     }
-
-    // Úklid
-    //planner->safe_interval_table.reset();
 }

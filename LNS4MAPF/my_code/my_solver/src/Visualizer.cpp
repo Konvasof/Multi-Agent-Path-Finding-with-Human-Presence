@@ -196,18 +196,27 @@ void Visualizer::run()
   while (window.isOpen() && running)
   {
     if (shared_data.human_path_ready.load(std::memory_order_acquire)) { 
-        human_path_data.clear(); 
+        all_time_human_path_data.clear();
+        human_path_data.clear(); // Ponecháme i starý vektor, protože ho využívá tvá funkce draw_human() pro pozici
         
-        // Convert Location ID to Point2d
-        for (int loc_id : shared_data.human_path_locations) { 
-            human_path_data.push_back(instance.location_to_position(loc_id)); 
-        } 
+        // Convert Location IDs to Point2d for every time step
+        for (const auto& path_locs : shared_data.all_time_human_paths) {
+            std::vector<Point2d> path_pts;
+            for (int loc_id : path_locs) {
+                path_pts.push_back(instance.location_to_position(loc_id));
+            }
+            all_time_human_path_data.push_back(path_pts);
+        }
         
-        // Reset the flag so we don't load it again every frame
+        // První pozice (t=0) do klasického vektoru pro statické vykreslení postavičky
+        if (!all_time_human_path_data.empty()) {
+            human_path_data = all_time_human_path_data[0];
+        }
+
+        // Reset vlajky
         shared_data.human_path_ready.store(false, std::memory_order_release); 
         
-        // Write to the internal GUI log
-        add_to_log("Loaded new human path: " + std::to_string(human_path_data.size()) + " steps."); 
+        add_to_log("Loaded dynamic human paths for " + std::to_string(all_time_human_path_data.size()) + " time steps."); 
     }
     // check whether new paths arrived
     if (solution_vis.is_playing)
@@ -293,9 +302,10 @@ void Visualizer::run()
     draw_goals(window);
     draw_agents(window);
 
-    // --- INTEGRACE TVÝCH PRVKŮ ---
-    draw_doors(window); // Dveře pod člověkem
-    draw_human(window); // Člověk nad agenty a dveřmi
+    // Human implementation
+    draw_doors(window); 
+    draw_human_path(window);
+    draw_human(window); 
 
     // set the view
     window.setView(view);
@@ -1628,19 +1638,18 @@ void Visualizer::draw_human(sf::RenderWindow& window)
 
     // Získáme aktuální čas (aby se hýbal s přehráváním)
     int t = std::min((int)solution_vis.time, (int)human_path_data.size() - 1);
-    Point2d pos = human_path_data[t];
+    //Point2d pos = human_path_data[t]; // Nechci se pohybovat v čase, pouze stát na místě
+    Point2d pos = human_path_data[0];
 
     // Spočítáme střed buňky v pixelech
     float centerX = (float)pos.x * CELL_SIZE + CELL_SIZE / 2.0f;
     float centerY = (float)pos.y * CELL_SIZE + CELL_SIZE / 2.0f;
-
-    // --- FIGURKA ČLOVĚKA (Styl deskové hry) ---
     
     // Barvy: Azurová (Cyan) svítí na černém pozadí nejlépe
     sf::Color bodyColor = sf::Color::Cyan; 
     sf::Color outlineColor = sf::Color::Black;
 
-    // 1. TĚLO (Kužel / Spodek)
+    // TĚLO
     float bodyRadius = CELL_SIZE * 0.35f;
     sf::CircleShape body(bodyRadius);
     body.setOrigin({bodyRadius, bodyRadius}); // Nastavíme střed otáčení/pozicování na střed kruhu
@@ -1650,7 +1659,7 @@ void Visualizer::draw_human(sf::RenderWindow& window)
     body.setOutlineThickness(1.0f);
     body.setOutlineColor(outlineColor);
 
-    // 2. HLAVA (Menší kruh nahoře)
+    // HLAVA
     float headRadius = CELL_SIZE * 0.2f;
     sf::CircleShape head(headRadius);
     head.setOrigin({headRadius, headRadius});
@@ -1659,8 +1668,7 @@ void Visualizer::draw_human(sf::RenderWindow& window)
     head.setOutlineThickness(1.0f);
     head.setOutlineColor(outlineColor);
 
-    // 3. ZVÝRAZNĚNÍ (Highlight pod figurkou)
-    // Aby byl vidět i kdyby stál na něčem stejnobarevném
+    // ZVÝRAZNĚNÍ 
     sf::CircleShape highlight(bodyRadius * 1.2f);
     highlight.setOrigin({bodyRadius * 1.2f, bodyRadius * 1.2f});
     highlight.setPosition({centerX, centerY + CELL_SIZE * 0.2f});
@@ -1689,7 +1697,7 @@ void Visualizer::set_futuristic_theme()
 {
   ImGuiStyle& style = ImGui::GetStyle();
   
-  // 1. GEOMETRIE
+  //GEOMETRIE
   style.WindowRounding    = 5.0f;
   style.FrameRounding     = 3.0f;
   style.ScrollbarRounding = 0.0f;
@@ -1698,7 +1706,7 @@ void Visualizer::set_futuristic_theme()
   style.WindowBorderSize  = 1.0f;
   style.FrameBorderSize   = 1.0f;
 
-  // 2. BARVY
+  // BARVY
   ImVec4* colors = style.Colors;
   colors[ImGuiCol_WindowBg]       = ImVec4(0.08f, 0.08f, 0.10f, 0.90f);
   colors[ImGuiCol_PopupBg]        = ImVec4(0.08f, 0.08f, 0.10f, 0.94f);
@@ -1727,22 +1735,66 @@ void Visualizer::set_futuristic_theme()
   colors[ImGuiCol_ResizeGripActive] = ImVec4(0.00f, 0.50f, 0.50f, 0.95f);
 }
 
-void Visualizer::load_human_path(const std::string& filename)
+void Visualizer::draw_human_path(sf::RenderWindow& window) 
 {
-  std::ifstream file(filename);
-  if (!file.is_open())
-  {
-    add_to_log("CHYBA: Nepodařilo se otevřít soubor s cestou člověka: " + filename);
-    return;
-  }
+    // Pokud je vektor dat prázdný, nebo uživatel vypnul cesty, nic nekreslíme
+    if (all_time_human_path_data.empty() || !show_paths) return;
 
-  human_path_data.clear();
-  int x, y;
-  // Čteme dvojice čísel, dokud soubor nekončí
-  while (file >> x >> y)
-  {
-    human_path_data.push_back(Point2d(x, y));
-  }
-  
-  add_to_log("Načtena cesta člověka: " + std::to_string(human_path_data.size()) + " kroků.");
+    // 1. Zjistíme, jaký je právě čas ve vizualizaci
+    int t = solution_vis.time;
+
+    // 2. Ošetření případu, kdy by vizualizace robotů běžela déle, než je délka dat člověka
+    if (t >= (int)all_time_human_path_data.size()) {
+        t = all_time_human_path_data.size() - 1;
+    }
+
+    // 3. Vytáhneme konkrétní cestu pro tento okamžik
+    const std::vector<Point2d>& current_path = all_time_human_path_data[t];
+
+    // Pokud je cesta v tomto čase prázdná, nic se nevykreslí
+    if (current_path.empty()) return;
+
+    // 4. Nastavení vizuálu cesty
+    sf::Color pathColor = sf::Color(0, 255, 255, 160); // Cyan (mírně průhledná)
+    float lineThickness = CELL_SIZE * 0.3f; // Tloušťka čáry (30 % velikosti buňky)
+
+    // 5. Vykreslení tlustých segmentů (obdélníků) mezi jednotlivými kroky
+    for (size_t i = 0; i < current_path.size() - 1; ++i) 
+    {
+        float cx1 = (float)current_path[i].x * CELL_SIZE + CELL_SIZE / 2.0f;
+        float cy1 = (float)current_path[i].y * CELL_SIZE + CELL_SIZE / 2.0f;
+        float cx2 = (float)current_path[i+1].x * CELL_SIZE + CELL_SIZE / 2.0f;
+        float cy2 = (float)current_path[i+1].y * CELL_SIZE + CELL_SIZE / 2.0f;
+
+        sf::RectangleShape line;
+        line.setFillColor(pathColor);
+
+        if (cx1 == cx2) { 
+            // Vertikální pohyb
+            float minY = std::min(cy1, cy2);
+            line.setPosition({cx1 - lineThickness / 2.0f, minY});
+            line.setSize({lineThickness, std::abs(cy2 - cy1)});
+        } else { 
+            // Horizontální pohyb
+            float minX = std::min(cx1, cx2);
+            line.setPosition({minX, cy1 - lineThickness / 2.0f});
+            line.setSize({std::abs(cx2 - cx1), lineThickness});
+        }
+        
+        window.draw(line);
+    }
+
+    // 6. Vykreslení "kloubů" (teček) pro hladké napojení rohů a zvýraznění cesty
+    for (size_t i = 0; i < current_path.size(); ++i) 
+    {
+        sf::CircleShape dot(lineThickness / 2.0f);
+        dot.setFillColor(pathColor);
+        dot.setOrigin({lineThickness / 2.0f, lineThickness / 2.0f}); 
+        
+        float cx = (float)current_path[i].x * CELL_SIZE + CELL_SIZE / 2.0f;
+        float cy = (float)current_path[i].y * CELL_SIZE + CELL_SIZE / 2.0f;
+        dot.setPosition({cx, cy});
+        
+        window.draw(dot);
+    }
 }

@@ -456,5 +456,7 @@ private:
 
   void draw_human(sf::RenderWindow& window);
   void draw_doors(sf::RenderWindow& window);
+  void draw_human_path(sf::RenderWindow& window);
   bool show_paths = false; 
+  std::vector<std::vector<Point2d>> all_time_human_path_data;
 };
