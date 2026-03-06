@@ -77,7 +77,8 @@ Visualizer::Visualizer(Instance& instance_, Computation& computation_thread_, Sh
       clock(),
       settings(),
       show_agent_num_dialog(false),
-      show_paths(false)
+      show_paths(false),
+      show_human_path(true)
       //human_texture(),       // Inicializace textury
       //human_sprite(human_texture)
 {
@@ -257,6 +258,7 @@ void Visualizer::run()
       }
       lns_info.insert(lns_info.end(), std::make_move_iterator(new_lns_info.begin()), std::make_move_iterator(new_lns_info.end()));
       lns_vis.max_time = static_cast<int>(lns_info.size()) - 1;
+      lns_vis.time = lns_vis.max_time;
       // std::cout << "New max time: " << lns_vis.max_time << std::endl;
       lns_vis.update();
     }
@@ -1186,6 +1188,7 @@ void Visualizer::create_right_panel()
   create_visualization_playback_bar("Solution visualization:", solution_vis, 0);
 
   ImGui::Checkbox("Show agent paths", &show_paths);
+  ImGui::Checkbox("Show human path", &show_human_path);
   ImGui::Separator();
 
   // LNS visualization
@@ -1738,7 +1741,7 @@ void Visualizer::set_futuristic_theme()
 void Visualizer::draw_human_path(sf::RenderWindow& window) 
 {
     // Pokud je vektor dat prázdný, nebo uživatel vypnul cesty, nic nekreslíme
-    if (all_time_human_path_data.empty() || !show_paths) return;
+    if (all_time_human_path_data.empty() || !show_human_path) return;
 
     // 1. Zjistíme, jaký je právě čas ve vizualizaci
     int t = solution_vis.time;
