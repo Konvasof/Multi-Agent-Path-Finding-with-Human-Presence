@@ -267,6 +267,10 @@ auto main(int argc, char** argv) -> int
               gen_door.seed(seed + 99);
           }
           
+          std::unordered_set<int> robot_occupied_locs;
+          for (int loc : instance->get_start_locations()) robot_occupied_locs.insert(loc);
+          for (int loc : instance->get_goal_locations()) robot_occupied_locs.insert(loc);
+
           int width = map_data.width;
           int height = map_data.height;
           std::vector<int> valid_edge_doors;
@@ -281,7 +285,7 @@ auto main(int argc, char** argv) -> int
                   if (is_edge && !is_corner) {
                       int loc = y * width + x;
                       // Must be free space (0) and not the human's start location
-                      if (map_data.data[loc] == 0 && loc != human_start_loc) {
+                      if (map_data.data[loc] == 0 && loc != human_start_loc && robot_occupied_locs.find(loc) == robot_occupied_locs.end()) {
                           valid_edge_doors.push_back(loc);
                       }
                   }

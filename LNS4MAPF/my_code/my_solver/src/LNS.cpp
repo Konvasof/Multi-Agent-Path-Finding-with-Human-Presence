@@ -84,7 +84,11 @@ void LNS::solve()
   Clock clock;
   clock.start();
 
-  // 1. Calculate initial solution
+  if (safety_exit_location != -1) {
+      // Pernament blockade
+      planner->safe_interval_table.add_constraint(TimePoint(safety_exit_location, TimeInterval(0, INT_MAX)));
+  }
+  // Calculate initial solution
   while (!found_initial_solution && clock.get_current_time().first < settings.time_limit)
   {
     found_initial_solution = find_initial_solution();
@@ -93,9 +97,12 @@ void LNS::solve()
     if (!found_initial_solution)
     {
       planner->reset();
-      already_planned.clear();
-    }
 
+      if (safety_exit_location != -1) {
+          planner->safe_interval_table.add_constraint(TimePoint(safety_exit_location, TimeInterval(0, INT_MAX)));
+      already_planned.clear();
+      }
+    }
     // restart only if the settings allow it
     if (!settings.restarts)
     {
@@ -110,13 +117,11 @@ void LNS::solve()
   assertm(found_initial_solution, "Could not find the initial solution");
   assertm(solution.is_valid(instance), "Found invalid solution");
 
-  // 2. Initialize the constraint table (needed for randomwalk and intersection destroy operator)
+  // Initialize the constraint table (needed for randomwalk and intersection destroy operator)
   if (settings.destroy_settings.type != DESTROY_TYPE::RANDOM)
   {
     initialize_constraint_table(solution.paths);
   }
-
-  // --- 3. MAIN LNS LOOP ---
   while (iteration_num < settings.max_iter && clock.get_current_time().first < settings.time_limit)
   {
     // check for visualization thread end
@@ -235,9 +240,7 @@ void LNS::solve()
       log.iteration_time_wall.push_back(iteration_time_wall);
       log.iteration_time_cpu.push_back(iteration_time_cpu);
     }
-  } // <-- ZDE SPRÁVNĚ KONČÍ HLAVNÍ LNS CYKLUS
-
-  // --- 4. FINAL HUMAN PATH EVALUATION OVER TIME ---
+  }
   // Calculates the human path at each time step and stores it in a vector for clean output.
   if (human_start_location != -1 && safety_exit_location != -1)
   {
@@ -246,7 +249,7 @@ void LNS::solve()
       
       int max_t = solution.makespan;
 
-      // 1. Calculate paths silently
+      // Calculate paths silently
       for (int t = 0; t <= max_t; t++)
       {
           int current_human_loc = human_start_location;
@@ -264,7 +267,7 @@ void LNS::solve()
               if (!robot_path.empty()) {
                   int robot_loc = -1;
                   
-                  // Zjistíme, kde přesně robot stojí v čase 't'
+                  // Where is the robot at time t 
                   for (const auto& tp : robot_path) {
                       if (tp.interval.t_min <= t && tp.interval.t_max >= t) {
                           robot_loc = tp.location;
@@ -272,7 +275,7 @@ void LNS::solve()
                       }
                   }
                   
-                  // Pokud je robot na mapě, uděláme z jeho aktuálního políčka zeď (od času 0 do INT_MAX)
+                  // If the robot is at a location at time t, add it as a static obstacle for the human planner
                   if (robot_loc != -1) {
                       TimePoint static_obstacle(robot_loc, TimeInterval(0, INT_MAX));
                       temp_human_planner.safe_interval_table.add_constraint(static_obstacle);
@@ -290,7 +293,7 @@ void LNS::solve()
           all_human_paths.push_back(human_tp_path);
       }
 
-      // 2. Print the summarized results from the vector
+      //Print the summarized results from the vector
       std::cout << "\n--- Human Path Evaluation Summary ---" << std::endl;
       for (int t = 0; t <= max_t; t++)
       {
@@ -306,7 +309,7 @@ void LNS::solve()
       }
       std::cout << "-------------------------------------" << std::endl;
       
-      // --- 3. Uložení vektoru vektorů pro vizualizaci ---
+      // Saving vector of human paths to shared data for visualization
       if (!all_human_paths.empty()) {
           std::vector<std::vector<int>> gui_all_paths;
           
@@ -319,14 +322,13 @@ void LNS::solve()
               gui_all_paths.push_back(single_time_path);
           }
           
-          // Bezpečné uložení do sdílené struktury
+          // Safety upload to shared data for visualization
           shared_data->all_time_human_paths = gui_all_paths;
           
-          // Signalizace vizualizéru, že jsou data připravena ke čtení
+          // Signalization to the visualization thread that the human paths are ready
           shared_data->human_path_ready.store(true, std::memory_order_release);
       }
   }
-  // --- END OF HUMAN PATH EVALUATION ---
   
   std::cout << "Final solution cost: " << solution.sum_of_costs << std::endl;
   print_safety_report();
@@ -341,6 +343,15 @@ auto LNS::find_initial_solution() -> bool
   solution                                     = PrioritizedPlanning();
   auto [init_sol_time_wall, init_sol_time_cpu] = clock.get_current_time();
   solution.calculate_cost(instance);
+
+  // check safety of the initial solution
+  if (safety_aware_mode && solution.feasible)
+  {
+      if (!validate_safety(solution))
+      {
+          solution.feasible = false;
+      }
+  }
 
   // construct LNS iteration info and add to the shared data
   if (settings.sipp_settings.info_type == INFO_type::visualisation)

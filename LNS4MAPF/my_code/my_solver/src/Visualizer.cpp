@@ -258,7 +258,12 @@ void Visualizer::run()
       }
       lns_info.insert(lns_info.end(), std::make_move_iterator(new_lns_info.begin()), std::make_move_iterator(new_lns_info.end()));
       lns_vis.max_time = static_cast<int>(lns_info.size()) - 1;
-      lns_vis.time = lns_vis.max_time;
+
+      int last_accepted = lns_vis.max_time;
+      while (last_accepted > 0 && !lns_info[last_accepted].accepted) {
+          last_accepted--;
+      }
+      lns_vis.time = last_accepted;
       // std::cout << "New max time: " << lns_vis.max_time << std::endl;
       lns_vis.update();
     }
@@ -1637,8 +1642,13 @@ void Visualization::next_iteration()
 void Visualizer::draw_human(sf::RenderWindow& window)
 {
     // Pokud nemáme cestu, nic nekreslíme
-    if (human_path_data.empty()) return;
+    if (human_path_data.empty() || !show_human_path) return;
 
+    int last_accepted = lns_vis.max_time;
+    while (last_accepted > 0 && !lns_info[last_accepted].accepted) {
+        last_accepted--;
+    }
+    if (lns_vis.time != last_accepted) return;
     // Získáme aktuální čas (aby se hýbal s přehráváním)
     int t = std::min((int)solution_vis.time, (int)human_path_data.size() - 1);
     //Point2d pos = human_path_data[t]; // Nechci se pohybovat v čase, pouze stát na místě
@@ -1743,6 +1753,11 @@ void Visualizer::draw_human_path(sf::RenderWindow& window)
     // Pokud je vektor dat prázdný, nebo uživatel vypnul cesty, nic nekreslíme
     if (all_time_human_path_data.empty() || !show_human_path) return;
 
+    int last_accepted = lns_vis.max_time;
+    while (last_accepted > 0 && !lns_info[last_accepted].accepted) {
+        last_accepted--;
+    }
+    if (lns_vis.time != last_accepted) return;
     // 1. Zjistíme, jaký je právě čas ve vizualizaci
     int t = solution_vis.time;
 
