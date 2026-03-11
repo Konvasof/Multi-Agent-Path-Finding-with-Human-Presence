@@ -23,6 +23,7 @@ namespace po = boost::program_options;
 
 constexpr int    DEFAULT_MAX_ITER          = 10;
 constexpr double DEFAULT_TIME_LIMIT        = 30.0;
+//constexpr double DEFAULT_TIME_LIMIT        = 180.0;
 constexpr int    DEFAULT_NEIGHBORHOOD_SIZE = 10;
 
 
