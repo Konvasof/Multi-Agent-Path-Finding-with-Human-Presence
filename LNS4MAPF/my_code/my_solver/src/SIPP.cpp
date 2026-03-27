@@ -984,10 +984,8 @@ bool SIPP::check_reachability(int start_loc, int goal_loc, int start_time)
   // 4. Nastavení Open Listu
   sipp::PriorityQueue open_list{sipp::SIPPNodeComparator(&rnd_generator)};
   
-  // -- TOTO JSME PŘIDALI --
   int map_width = instance.get_map_data().width;
   int map_height = instance.get_map_data().height;
-  // ----------------------
 
   // Heuristika
   int start_y = start_loc / map_width;
@@ -1019,7 +1017,6 @@ bool SIPP::check_reachability(int start_loc, int goal_loc, int start_time)
     int next_time_min = current->time_point.interval.t_min + 1;
     int next_time_max = (current->time_point.interval.t_max == INT_MAX) ? INT_MAX : current->time_point.interval.t_max + 1;
 
-    // --- MANUÁLNÍ SOUSEDÉ (TOHLE JE TA KLÍČOVÁ ZMĚNA) ---
     int curr_loc = current->time_point.location;
     int cx = curr_loc % map_width;
     int cy = curr_loc / map_width;
@@ -1220,7 +1217,6 @@ auto SIPP::plan_human_suboptimal(int start_loc, int goal_loc, double w) -> TimeP
       continue;
     }
 
-    // CÍL?
     if (current->time_point.location == goal_loc && current->time_point.interval.t_max == INT_MAX)
     {
       TimePointPath ret = sipp::extract_path(current);

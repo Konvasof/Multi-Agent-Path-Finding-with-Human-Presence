@@ -250,7 +250,6 @@ void LNS::solve()
       std::vector<TimePointPath> all_human_paths;
       int max_t = solution.makespan;
 
-      // --- ZRYCHLENÍ: Vytvoříme SIPP POUZE JEDNOU před cyklem ---
       SIPP temp_human_planner(instance, rnd_generator, settings.sipp_settings);
 
       // Calculate paths
@@ -264,7 +263,6 @@ void LNS::solve()
               continue; 
           }
 
-          // --- BLESKOVÉ OČIŠTĚNÍ PAMĚTI od překážek z kroku t-1 ---
           temp_human_planner.safe_interval_table.clear_all_constraints();
 
           for (const auto& robot_path : solution.paths) {
@@ -1037,7 +1035,6 @@ bool LNS::validate_safety(const Solution& sol)
   int makespan = sol.makespan;
   int check_duration = makespan + 1; 
 
-  // --- ZRYCHLENÍ: SIPP SE VYTVOŘÍ POUZE JEDNOU PŘED CYKLEM ---
   auto safety_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
 
   for (int t = 0; t < check_duration; t++) 
@@ -1045,7 +1042,6 @@ bool LNS::validate_safety(const Solution& sol)
       int current_human_loc = human_start_location;
       if (current_human_loc == safety_exit_location) continue;
 
-      // --- BLESKOVÉ OČIŠTĚNÍ PAMĚTI ---
       safety_planner->safe_interval_table.clear_all_constraints();
 
       for (const auto& path : sol.paths) {
@@ -1083,7 +1079,6 @@ void LNS::print_safety_report()
     std::vector<int> failed_steps;
     int check_duration = solution.makespan + 1;
 
-    // --- ZRYCHLENÍ: SIPP SE VYTVOŘÍ POUZE JEDNOU PŘED CYKLEM ---
     auto safety_planner = std::make_unique<SIPP>(instance, rnd_generator, settings.sipp_settings);
 
     for (int t = 0; t < check_duration; t++) 
@@ -1092,7 +1087,6 @@ void LNS::print_safety_report()
         int current_human_loc = human_start_location;
         if (current_human_loc == safety_exit_location) continue;
 
-        // --- BLESKOVÉ OČIŠTĚNÍ PAMĚTI ---
         safety_planner->safe_interval_table.clear_all_constraints();
 
         // Vložíme statické překážky pro čas t

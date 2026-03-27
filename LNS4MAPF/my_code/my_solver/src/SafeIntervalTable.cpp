@@ -447,14 +447,14 @@ void SafeIntervalTable::clear_all_constraints()
 {
   const int num_free_cells = instance.get_num_free_cells();
   
-  // 1. Resetuje všechny intervaly zpět na výchozí stav (0, INT_MAX)
+  // Resetuje všechny intervaly zpět na výchozí stav (0, INT_MAX)
   safe_intervals.assign(num_free_cells, std::list<TimeInterval>(1, TimeInterval(0, INT_MAX)));
   
-  // 2. Resetuje interní počítadla
+  // Resetuje interní počítadla
   unlimited_safe_intervals = num_free_cells;
   latest_constraint_end = 0;
   latest_constraint_end_updated = false;
 
-  // 3. Promaže kolize na hranách
+  // Promaže kolize na hranách
   edge_constraint_table.clear();
 }
