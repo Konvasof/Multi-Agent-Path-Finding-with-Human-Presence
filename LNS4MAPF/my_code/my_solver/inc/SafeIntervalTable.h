@@ -93,6 +93,9 @@ public:
    * @param loc2 The ending location of the edge.
    * @param time The time at which the edge is constrained.
    */
+
+  void clear();
+
   void remove(int loc1, int loc2, int time);
   // auto get(int loc1, int loc2, int time) const -> bool;
 
@@ -187,6 +190,9 @@ public:
    *
    * @param timepoint The time point to remove as a constraint.
    */
+
+  void clear_all_constraints();
+  
   void remove_constraint(const TimePoint& timepoint);
 
   /**

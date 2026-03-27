@@ -21,7 +21,8 @@
 // create program options namespace
 namespace po = boost::program_options;
 
-constexpr int    DEFAULT_MAX_ITER          = 10;
+//constexpr int    DEFAULT_MAX_ITER          = 10;
+constexpr int    DEFAULT_MAX_ITER          = 100;
 constexpr double DEFAULT_TIME_LIMIT        = 30.0;
 //constexpr double DEFAULT_TIME_LIMIT        = 180.0;
 constexpr int    DEFAULT_NEIGHBORHOOD_SIZE = 10;
@@ -371,5 +372,14 @@ auto main(int argc, char** argv) -> int
     sol.save(output_paths_file, *instance);
   }
 
+  // zavolam ze sol cenu a feasible a meta data( jmeno instance, casovy limit, jmeno mapy atd..)
+  // volam s novou cestou souboru kam se mi ulozi kazdy tenhle kolobeh
+  // na konci mainu soubor, kam tohle vsechno ulozim - json soubor z kazdeho exporimnetu 
+  // yaml nebo csv
+  // knihovna nlohmann/json 
+  // zadefinuju nlohmannjson results objekt a pak tam vkladam data result["cost"]= 1234
+  // result.save(path)
+  // kouknout se na to, co se deje když to není feasible, kdyz najdu reseni, neni dobry a jdu na dalsi reseni, koukni na to.
+  // over ze mi dobre funguje to reseni LNS a ze to dobre prohledava 
   return EXIT_SUCCESS;
 }

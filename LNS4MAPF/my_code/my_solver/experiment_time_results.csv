@@ -1,0 +1,6 @@
+Map,Agents,TimeLimit,Seed,Success,Cost,RealTime_s
+room-32-32-4.map,20,30,3,False,-1,30.045126914978027
+room-32-32-4.map,40,30,3,False,-1,30.0391788482666
+room-32-32-4.map,60,30,3,False,-1,30.033348083496094
+room-32-32-4.map,80,30,3,False,-1,30.03382706642151
+room-32-32-4.map,100,30,3,False,-1,30.032823085784912
