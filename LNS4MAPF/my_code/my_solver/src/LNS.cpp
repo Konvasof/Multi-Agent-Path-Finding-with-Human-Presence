@@ -115,6 +115,18 @@ void LNS::solve()
   assertm(found_initial_solution, "Could not find the initial solution");
   assertm(solution.is_valid(instance), "Found invalid solution");
 
+  //Safety check
+  bool init_sol_safety_violation = false;
+  if (safety_aware_mode)
+  {
+    if (!validate_safety(solution))
+    {
+      init_sol_safety_violation = true;
+    }
+  }
+  if(init_sol_safety_violation){
+    std::cout << "Initial solution not safe" << std::endl;
+  }
   // Initialize the constraint table (needed for randomwalk and intersection destroy operator)
   if (settings.destroy_settings.type != DESTROY_TYPE::RANDOM)
   {
@@ -170,12 +182,13 @@ void LNS::solve()
 
     if (!perturbed_sol.feasible || safety_violation)
     {
-      //std::cout << "  [Result] REJECTED: " << (!perturbed_sol.feasible ? "Nevalidní cesty (kolize/nenalezeno)" : "Člověk v ohrožení (Safety Violation)") << std::endl;
+      std::cout << "  [Result] REJECTED: " << (!perturbed_sol.feasible ? "Nevalidní cesty (kolize/nenalezeno)" : "Člověk v ohrožení (Safety Violation)") << std::endl;
       // Discard unsafe or infeasible solution
       discard_solution(perturbed_sol, solution);
     }
     else
     {
+      std::cout << "  [Result] ACCEPTED: " << (!perturbed_sol.feasible ? "Validni cesty" : "Člověk v pohodě (Safety Ensured)") << std::endl;
       // Calculate Cost
       perturbed_sol.calculate_cost(instance);
       improvement = solution.sum_of_delays - perturbed_sol.sum_of_delays;
@@ -191,7 +204,7 @@ void LNS::solve()
       // Check improvement
       if (improvement <= 0)
       {
-        //std::cout << "  [Result] REJECTED: Žádné zlepšení (zhoršení o " << -improvement << " kroků)" << std::endl;
+        std::cout << "  [Result] DISCARDED: Člověk sice v bezpečí, ale řešení není lepší (zlepšení " << improvement << ")" << std::endl;
         // Worse solution -> Update weights (Fail)
         if (settings.destroy_settings.type == DESTROY_TYPE::ADAPTIVE)
         {
@@ -207,7 +220,7 @@ void LNS::solve()
       }
       else
       {
-        //std::cout << "  [Result] ACCEPTED: Našli jsme lepší řešení! Zlepšení o " << improvement << " kroků." << std::endl;
+        std::cout << "  [Result] ACCEPTED & IMPROVED: Člověk v bezpečí a našli jsme lepší řešení! (zlepšení o " << improvement << ")" << std::endl;
         // Better solution -> Update weights (Success)
         if (settings.destroy_settings.type == DESTROY_TYPE::ADAPTIVE)
         {
@@ -250,7 +263,7 @@ void LNS::solve()
       log.iteration_time_cpu.push_back(iteration_time_cpu);
     }
   }
-// Calculates the human path at each time step and stores it in a vector for clean output.
+  // Calculates the human path at each time step and stores it in a vector for clean output.
   if (human_start_location != -1 && safety_exit_location != -1)
   {
       std::vector<TimePointPath> all_human_paths;

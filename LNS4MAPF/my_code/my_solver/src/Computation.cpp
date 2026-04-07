@@ -78,8 +78,6 @@ void Computation::set_safety_params(bool safety_aware, int human_start, int door
     solver->human_start_location = human_start;
     solver->safety_exit_location = door_loc;
     
-    std::cout << "Safety params set. Mode: " << safety_aware 
-              << ", Human start loc: " << human_start 
-              << ", Door loc: " << door_loc << std::endl;
+    //std::cout << "Safety params set. Mode: " << safety_aware << ", Human start loc: " << human_start << ", Door loc: " << door_loc << std::endl;
   }
 }

@@ -35,9 +35,9 @@ auto main(int argc, char** argv) -> int
       "humanPath", po::value<std::string>()->default_value(""), "Path to human path file")(
       "safetyDoor", po::value<int>()->default_value(-1), "Location ID of the safety door")(
       "sipp_implementation", po::value<std::string>()->default_value("SIPP_mine"),
-      "implementation of SIPP (SIPP_mine, SIPP_mapf_lns, SIPP_suboptimal)")(
+      "implementation of SIPP (SIPP_mine, SIPP_mapf_lns, SIPP_suboptimal)")(//set as default SIPP_mine, but can be changed to SIPP_suboptimal for suboptimal SIPP
       "Restarts,r", po::value<bool>()->default_value(true),"restart the search if no feasible initial solution was found")(
-      "destroy_operator", po::value<std::string>()->default_value("ADAPTIVE"),
+      "destroy_operator", po::value<std::string>()->default_value("RANDOM"),
       "Destroy operator to be used in LNS (RANDOM, RANDOMWALK, INTERSECTION, ADAPTIVE, RANDOM_CHOOSE, BLOCKED)")(
       "neighborhood_size,n", po::value<int>()->default_value(DEFAULT_NEIGHBORHOOD_SIZE),
       "Size of the neighborhood used by the destroy operator (number of paths to be destroyed)")(
@@ -107,7 +107,6 @@ auto main(int argc, char** argv) -> int
     std::cout << "WARNING: Unknown sipp implementation: '" << sipp_algo << "', using default option "
               << magic_enum::enum_name(sipp_implementation) << std::endl;
   }
-
   // Read destroy operator, default is RANDOM
   DESTROY_TYPE destroy_type     = DESTROY_TYPE::RANDOM;
   auto         destroy_type_opt = magic_enum::enum_cast<DESTROY_TYPE>(destroy_name, magic_enum::case_insensitive);
