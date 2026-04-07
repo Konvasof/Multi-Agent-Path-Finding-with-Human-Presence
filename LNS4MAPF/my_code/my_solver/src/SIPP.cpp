@@ -1163,54 +1163,54 @@ std::vector<int> SIPP::find_shortest_path(int start_loc, int goal_loc)
 
 auto SIPP::plan_human_suboptimal(int start_loc, int goal_loc, double w) -> TimePointPath
 {
-  // Reset of statistics
   if (settings.info_type != INFO_type::no_info) initialize_iter_info();
 
   const Map& map_data = instance.get_map_data();
 
-  // Control of validity of start and goal locations
   if (!map_data.is_in(start_loc) || !map_data.is_in(goal_loc)) return {};
 
-  // Definition of heuristics (Manhattan) 
+  int map_width = map_data.width;
+  int map_height = map_data.height;
+
   auto get_manhattan = [&](int loc) {
-      int y = loc / map_data.width;
-      int x = loc % map_data.width;
-      int gy = goal_loc / map_data.width;
-      int gx = goal_loc % map_data.width;
+      int y = loc / map_width;
+      int x = loc % map_width;
+      int gy = goal_loc / map_width;
+      int gx = goal_loc % map_width;
       return (double)(std::abs(x - gx) + std::abs(y - gy));
   };
 
-  // Counting suboptimality
   double start_h = get_manhattan(start_loc);
-  // w is faktor of suboptimality
   const int suboptimality_absolute = std::floor((w - 1.0) * start_h);
 
-  // Získáme odhady časů z tabulky (pro ořezávání prohledávání)
-  const int min_time = safe_interval_table.get_min_reach_time(goal_loc);
+  int min_time = (int)start_h;
+  if (map_data.index(goal_loc) == 0) {
+      min_time = safe_interval_table.get_min_reach_time(goal_loc);
+  }
   const int max_time = safe_interval_table.get_max_path_len_estimate();
 
-  // 4. Open List (používáme Suboptimal komparátor)
   sipp::PriorityQueueSuboptimal open_list{SIPPNodeComparatorSuboptimal(&rnd_generator, suboptimality_absolute)};
 
-  // Získáme první bezpečný interval na startu
   auto time_interval_start = safe_interval_table.get_first_safe_interval(start_loc);
 
-  // Vytvoříme Start Node
-  // f-score (h1) je max(min_time, start_h)
+  auto interval_pair = safe_interval_table.get_safe_intervals(start_loc, TimeInterval(0, 0));
+  if (time_interval_start == interval_pair.second) {
+      // Startovní políčko je kompletně zablokované (neexistuje bezpečný interval)
+      node_pool.merge_extra();
+      return {}; // Algoritmus to nevzdá pádem, ale korektně vrátí, že cesta neexistuje
+  }
+
   double h1 = std::max((double)min_time, start_h);
   open_list.push(node_pool.add_node(SIPPNode(start_loc, *time_interval_start, 0, h1, start_h, 0, nullptr)));
 
-  // Vyčistíme pomocná pole pro known nodes
   std::fill(known_min.begin(), known_min.end(), INT_MAX);
   std::fill(known_max.begin(), known_max.end(), -1);
 
-  // 5. Hlavní smyčka (Main Loop)
   while (!open_list.empty())
   {
     SIPPNode const* const current = open_list.top();
     open_list.pop();
 
-    // Pruning (pokud už jsme tu byli v lepším čase, přeskočit)
     if (current->time_point.interval.t_min >= known_min[current->time_point.location] &&
         current->time_point.interval.t_min <= known_max[current->time_point.location])
     {
@@ -1224,47 +1224,62 @@ auto SIPP::plan_human_suboptimal(int start_loc, int goal_loc, double w) -> TimeP
       return ret;
     }
 
-    // Update known nodes
     known_min[current->time_point.location] = std::min(current->time_point.interval.t_min, known_min[current->time_point.location]);
     known_max[current->time_point.location] = std::max(current->time_point.interval.t_max, known_max[current->time_point.location]);
 
-    // Interval pro vstup do souseda
     const TimeInterval neighbor_entry_interval(safe_increase(current->time_point.interval.t_min),
                                                safe_increase(current->time_point.interval.t_max));
 
-    // Expanze sousedů
-    const std::vector<int>& neighbors = instance.get_neighbor_locations(current->time_point.location);
-    for (const auto& neighbor : neighbors)
-    {
-      double h2 = get_manhattan(neighbor);
+    int curr_loc = current->time_point.location;
+    int cx = curr_loc % map_width;
+    int cy = curr_loc / map_width;
+    
+    int dx[] = {0, 0, 1, -1};
+    int dy[] = {1, -1, 0, 0};
 
-      // Získáme bezpečné intervaly souseda
-      auto [sf_start, sf_end] = safe_interval_table.get_safe_intervals(neighbor, neighbor_entry_interval);
+    for (int i = 0; i < 4; i++) {
+        int nx = cx + dx[i];
+        int ny = cy + dy[i];
 
-      for (auto it = sf_start; it != sf_end; it++)
-      {
-        TimePoint neighbor_tp(neighbor, *it);
-        
-        // Ořezání intervalu
-        if (it->t_min < neighbor_entry_interval.t_min) neighbor_tp.interval.t_min = neighbor_entry_interval.t_min;
-        
-        // Kontroly (čas, kolize hran, known)
-        if (neighbor_tp.interval.t_min > max_time) continue;
-        if (safe_interval_table.edge_constraint_table.get(neighbor_tp.location, current->time_point.location, neighbor_tp.interval.t_min))
-          continue;
-        if (neighbor_tp.interval.t_min >= known_min[neighbor] && neighbor_tp.interval.t_min <= known_max[neighbor])
-          continue;
+        if (nx >= 0 && nx < map_width && ny >= 0 && ny < map_height) {
+            int neighbor = ny * map_width + nx;
 
-        // Vypočet f-score
-        const double h1_new = std::max((double)min_time, neighbor_tp.interval.t_min + h2) - neighbor_tp.interval.t_min;
-        
-        // Přidání do open listu
-        open_list.push(node_pool.add_node(SIPPNode(neighbor_tp, neighbor_tp.interval.t_min, h1_new, h2, 0, current)));
-      }
+            // Povolit vstup, pokud je to 0 NEBO pokud je to náš cíl
+            if (map_data.index(neighbor) == 0 || neighbor == goal_loc) 
+            {
+                double h2 = get_manhattan(neighbor);
+
+                // Speciální pravidlo pro reálné dveře
+                if (neighbor == goal_loc && map_data.index(neighbor) != 0)
+                {
+                    int next_time_min = current->time_point.interval.t_min + 1;
+                    const double h1_new = std::max((double)min_time, next_time_min + h2) - next_time_min;
+                    open_list.push(node_pool.add_node(SIPPNode(
+                        TimePoint(neighbor, TimeInterval(0, INT_MAX)), next_time_min, h1_new, h2, 0, current)));
+                    continue;
+                }
+
+                auto [sf_start, sf_end] = safe_interval_table.get_safe_intervals(neighbor, neighbor_entry_interval);
+
+                for (auto it = sf_start; it != sf_end; it++)
+                {
+                  TimePoint neighbor_tp(neighbor, *it);
+                  if (it->t_min < neighbor_entry_interval.t_min) neighbor_tp.interval.t_min = neighbor_entry_interval.t_min;
+                  
+                  if (neighbor_tp.interval.t_min > max_time) continue;
+                  if (safe_interval_table.edge_constraint_table.get(neighbor_tp.location, current->time_point.location, neighbor_tp.interval.t_min))
+                    continue;
+                  if (neighbor_tp.interval.t_min >= known_min[neighbor] && neighbor_tp.interval.t_min <= known_max[neighbor])
+                    continue;
+
+                  const double h1_new = std::max((double)min_time, neighbor_tp.interval.t_min + h2) - neighbor_tp.interval.t_min;
+                  open_list.push(node_pool.add_node(SIPPNode(neighbor_tp, neighbor_tp.interval.t_min, h1_new, h2, 0, current)));
+                }
+            }
+        }
     }
   }
   
-  // Cesta nenalezena
   node_pool.merge_extra();
   return {};
 }

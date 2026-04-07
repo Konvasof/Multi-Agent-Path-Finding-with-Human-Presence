@@ -145,7 +145,7 @@ void Map::load(const std::string& map_fname)
         for (char i : line)
         {
           // treat . as free cell
-          if (i == '.')
+          if (i == '.' || i == 'H' || i == 'h' || i == '2')
           {
             // remember index to the free location vector
             location_to_free_location_vec.push_back(static_cast<int>(free_location_to_location_vec.size()));
@@ -159,15 +159,6 @@ void Map::load(const std::string& map_fname)
             // there is no index to the free location index
             location_to_free_location_vec.push_back(-1);
             data.push_back(1);
-          }
-          // --- TVOJE ÚPRAVA: Dveře (znak '2') ---
-          else if (i == '2')
-          {
-            // Pro začátek budeme dveře brát jako volné místo pro výpočty, 
-            // ale v datech si necháme hodnotu 2 pro vizualizaci.
-            location_to_free_location_vec.push_back(static_cast<int>(free_location_to_location_vec.size()));
-            free_location_to_location_vec.push_back(static_cast<int>(data.size()));
-            data.push_back(2); 
           }
           // report all other symbols as unknown
           else

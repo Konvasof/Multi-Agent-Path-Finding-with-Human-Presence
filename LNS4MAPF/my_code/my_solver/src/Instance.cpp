@@ -1,14 +1,4 @@
-/*
- * Author: Jan Chleboun
- * Date: 08-01-2025
- * Email: chlebja3@fel.cvut.cz
- * Description:
- */
-
 #include "Instance.h"
-
-// #include <bits/stdc++.h>
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -103,6 +93,44 @@ void Instance::load_map()
     throw std::runtime_error("Unable to load map: '" + std::string(e.what()) + "'");
   }
   map_data = std::move(new_map);
+
+  // Finding human position in the map file
+  parsed_human_location = -1;
+  std::ifstream map_file(map_fname);
+  if (map_file.is_open())
+  {
+    std::string line;
+    int y = 0;
+    bool map_data_started = false;
+    
+    while (getline(map_file, line))
+    {
+      // Cleaning up the line from whitespace
+      boost::algorithm::trim_right(line);
+
+      if (map_data_started)
+      {
+        for (int x = 0; x < (int)line.length() && x < map_data.width; x++)
+        {
+          if (line[x] == 'H' || line[x] == 'h')
+          {
+            // Recount from 2D to 1D location
+            parsed_human_location = y * map_data.width + x;
+          }
+          else if (line[x] == '2') {
+            parsed_safety_door = y * map_data.width + x;
+          }
+        }
+        y++;
+      }
+      // Wait till the "map" line is reached then the map data starts
+      if (line == "map")
+      {
+        map_data_started = true;
+      }
+    }
+    map_file.close();
+  }
 }
 
 void Instance::load_scene()

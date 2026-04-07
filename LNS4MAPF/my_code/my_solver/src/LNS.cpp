@@ -76,10 +76,13 @@ void LNS::solve()
 
   //std::cout << "\n--- START LNS ALGORITMU ---" << std::endl;
 
-  if (safety_exit_location != -1) {
-      // Pernament blockade
+  if (safety_exit_location != -1 && instance.get_map_data().index(safety_exit_location) == 0) {
       planner->safe_interval_table.add_constraint(TimePoint(safety_exit_location, TimeInterval(0, INT_MAX)));
   }
+  if (human_start_location != -1 && instance.get_map_data().index(human_start_location) == 0) {
+      planner->safe_interval_table.add_constraint(TimePoint(human_start_location, TimeInterval(0, INT_MAX)));
+  }
+
   // Calculate initial solution
   while (!found_initial_solution && clock.get_current_time().first < settings.time_limit)
   {
@@ -90,10 +93,13 @@ void LNS::solve()
     {
       planner->reset();
 
-      if (safety_exit_location != -1) {
+      if (safety_exit_location != -1 && instance.get_map_data().index(safety_exit_location) == 0) {
           planner->safe_interval_table.add_constraint(TimePoint(safety_exit_location, TimeInterval(0, INT_MAX)));
-      already_planned.clear();
       }
+      if (human_start_location != -1 && instance.get_map_data().index(human_start_location) == 0) {
+          planner->safe_interval_table.add_constraint(TimePoint(human_start_location, TimeInterval(0, INT_MAX)));
+      }
+      already_planned.clear(); // Vráceno zpět na správné místo ven z ifu
     }
     // restart only if the settings allow it
     if (!settings.restarts)

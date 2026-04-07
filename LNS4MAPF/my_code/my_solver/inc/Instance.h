@@ -1,11 +1,3 @@
-/**
- * @file
- * @brief MAPF problem instance representation and related functions.
- *
- * @author: Jan Chleboun <chlebja3@fel.cvut.cz>
- * @date: 08-01-2025
- */
-
 #pragma once
 #include <string>
 #include <vector>
@@ -301,6 +293,24 @@ public:
   }
 
   /**
+   * @brief Returns the location of the human 'H' if defined directly in the .map file.
+   */
+  [[nodiscard]] inline auto get_parsed_human_location() const -> int
+  {
+    assertm(initialized, "Instance not initialized.");
+    return parsed_human_location;
+  }
+
+  /**
+   * @brief Returns the location of the safety door '2' if defined directly in the .map file.
+   */
+  [[nodiscard]] inline auto get_parsed_safety_door() const -> int
+  {
+    assertm(initialized, "Instance not initialized.");
+    return parsed_safety_door;
+  }
+
+  /**
    * @brief Checks if a given location is a goal location.
    *
    * @param loc The location to be checked.
@@ -405,5 +415,6 @@ private:
 
   int sum_of_distances = 0; /**< Sum of distances for all agents. */
   int num_of_agents;        /**< Number of agents in the instance. */
+  int parsed_human_location = -1; /**< Position of the human 'H' */
+  int parsed_safety_door = -1; /**< Position of the door '2' */
 };
-
