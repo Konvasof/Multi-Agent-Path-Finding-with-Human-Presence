@@ -1,18 +1,18 @@
 #!/bin/bash
 
-Type_of_map=MiniMap
+Type_of_map=Room-32-32-4
 Even_or_odd=even
 Number_of_scenario=1
 
 MAP="../../MAPF-benchmark/mapf-map/${Type_of_map}.map"
 SCENARIO="../../MAPF-benchmark/mapf-scen-${Even_or_odd}/scen-${Even_or_odd}/${Type_of_map}-${Even_or_odd}-${Number_of_scenario}.scen"
 
-ROBOT_COUNTS=5
-NEIGHBORHOOD_SIZE=3
+ROBOT_COUNTS=20
+NEIGHBORHOOD_SIZE=5
 GUI=1
 TIME_LIMIT=30
-MAX_ITERATIONS=10
-SEED=2
+MAX_ITERATIONS=1000
+SEED=1
 SAFETY_CHECK=1
 DESTROY_OPERATOR=RANDOM
 OUTPUT_PATH=output.txt

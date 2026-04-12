@@ -161,7 +161,7 @@ void LNS::solve()
     
     if (perturbed_sol.feasible) {
         perturbed_sol.calculate_cost(instance);
-        std::cout << "  [Repair] Úspěch. Nový navržený cost: " << perturbed_sol.sum_of_costs << std::endl;
+        //std::cout << "  [Repair] Úspěch. Nový navržený cost: " << perturbed_sol.sum_of_costs << std::endl;
     } else {
         std::cout << "  [Repair] Selhání. Nelze najít cesty pro odstraněné agenty." << std::endl;
     }
@@ -182,13 +182,13 @@ void LNS::solve()
 
     if (!perturbed_sol.feasible || safety_violation)
     {
-      std::cout << "  [Result] REJECTED: " << (!perturbed_sol.feasible ? "Nevalidní cesty (kolize/nenalezeno)" : "Člověk v ohrožení (Safety Violation)") << std::endl;
+      //std::cout << "  [Result] REJECTED: " << (!perturbed_sol.feasible ? "Nevalidní cesty (kolize/nenalezeno)" : "Člověk v ohrožení (Safety Violation)") << std::endl;
       // Discard unsafe or infeasible solution
       discard_solution(perturbed_sol, solution);
     }
     else
     {
-      std::cout << "  [Result] ACCEPTED: " << (!perturbed_sol.feasible ? "Validni cesty" : "Člověk v pohodě (Safety Ensured)") << std::endl;
+      //std::cout << "  [Result] ACCEPTED: " << (!perturbed_sol.feasible ? "Validni cesty" : "Člověk v pohodě (Safety Ensured)") << std::endl;
       // Calculate Cost
       perturbed_sol.calculate_cost(instance);
       improvement = solution.sum_of_delays - perturbed_sol.sum_of_delays;
@@ -204,7 +204,7 @@ void LNS::solve()
       // Check improvement
       if (improvement <= 0)
       {
-        std::cout << "  [Result] DISCARDED: Člověk sice v bezpečí, ale řešení není lepší (zlepšení " << improvement << ")" << std::endl;
+        //std::cout << "  [Result] DISCARDED: Člověk sice v bezpečí, ale řešení není lepší (zlepšení " << improvement << ")" << std::endl;
         // Worse solution -> Update weights (Fail)
         if (settings.destroy_settings.type == DESTROY_TYPE::ADAPTIVE)
         {
@@ -239,6 +239,10 @@ void LNS::solve()
       }
     }
     
+    if (iteration_num % 100 == 0) {
+        std::cout << "  [Progres] Zpracována iterace " << iteration_num << " / " << settings.max_iter  << " | Aktuální nejlepší cost: " << solution.sum_of_costs << std::endl;
+    }
+
     // Logging and Visualization
     auto [iteration_time_wall, iteration_time_cpu] = iteration_clock.end();
 
