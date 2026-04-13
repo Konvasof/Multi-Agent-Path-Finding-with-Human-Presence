@@ -384,7 +384,7 @@ auto main(int argc, char** argv) -> int
   std::filesystem::path p(map_name);
   std::string clean_map_name = p.stem().string(); 
   
-  std::string log_filename = "log_" + clean_map_name + "_" + std::to_string(agent_num) + "agents.json";
+  std::string log_filename = "log_" + clean_map_name + "_" + std::to_string(agent_num) + "agents_seed" + std::to_string(seed) + ".json";
 
   // Writing the JSON
   std::ofstream out_file(log_filename);
