@@ -18,147 +18,259 @@ namespace po = boost::program_options;
 
 using json = nlohmann::json;
 
-constexpr int    DEFAULT_MAX_ITER          = 100;
-constexpr double DEFAULT_TIME_LIMIT        = 30.0;
+constexpr int    DEFAULT_MAX_ITER          = 10000000;
+constexpr double DEFAULT_TIME_LIMIT        = 60.0;
 constexpr int    DEFAULT_NEIGHBORHOOD_SIZE = 10;
 
 auto main(int argc, char** argv) -> int
-{
-  // Define command-line options
-  po::options_description desc("Allowed options");
-  desc.add_options()(
-      "help,h", "Show help message")(
-      "map,m", po::value<std::string>()->required(), "file with the map")(
-      "agents,a", po::value<std::string>()->required(), "input file for agents")(
-      "agentNum,k", po::value<int>()->default_value(0), "number of agents")(
-      "GUI,G", po::value<bool>()->default_value(true),"whether to turn on the graphical user interface")(
-      "sipp_suboptimality,w", po::value<double>()->default_value(1.0), "suboptimality factor for suboptimal sipp")(
-      "maxIterations,i", po::value<int>()->default_value(DEFAULT_MAX_ITER), "maximal number of iterations of LNS")(
-      "timeLimit,t", po::value<double>()->default_value(DEFAULT_TIME_LIMIT), "time limit to find the solution, in seconds")(
-      "safetyCheck", po::value<bool>()->default_value(false), "Enable safety-aware LNS mode")(
-      "humanPath", po::value<std::string>()->default_value(""), "Path to human path file")(
-      "safetyDoor", po::value<int>()->default_value(-1), "Location ID of the safety door")(
-      "sipp_implementation", po::value<std::string>()->default_value("SIPP_mine"),
-      "implementation of SIPP (SIPP_mine, SIPP_mapf_lns, SIPP_suboptimal)")(//set as default SIPP_mine, but can be changed to SIPP_suboptimal for suboptimal SIPP
-      "Restarts,r", po::value<bool>()->default_value(true),"restart the search if no feasible initial solution was found")(
-      "destroy_operator", po::value<std::string>()->default_value("RANDOM"),
-      "Destroy operator to be used in LNS (RANDOM, RANDOMWALK, INTERSECTION, ADAPTIVE, RANDOM_CHOOSE, BLOCKED)")(
-      "neighborhood_size,n", po::value<int>()->default_value(DEFAULT_NEIGHBORHOOD_SIZE),
-      "Size of the neighborhood used by the destroy operator (number of paths to be destroyed)")(
-      "humanStartX", po::value<int>()->default_value(-1), "Human Start X coordinate")(
-      "humanStartY", po::value<int>()->default_value(-1), "Human Start Y coordinate")(
-      "seed,s", po::value<int>()->default_value(-1),
-      "seed of the random generators for reproducability, to achieve non reproducible random behavior, use negative value")(
-      "output_paths", po::value<std::string>()->default_value(""),
-      "Output file for the paths of the generated solution. If not used, the solution will not be exported.");
-
-  // Parse and validate command-line arguments
-  po::variables_map vm;
-  try
-  {
-    po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
-  }
-  catch (const po::error& ex)
-  {
-    // Handle --help
-    if (vm.count("help") != 0U)
     {
-      std::cout << desc << std::endl;
-      return 0;
+    // Define command-line options
+    po::options_description desc("Allowed options");
+    desc.add_options()(
+        "help,h", "Show help message")(
+        "map,m", po::value<std::string>()->required(), "file with the map")(
+        "agents,a", po::value<std::string>()->required(), "input file for agents")(
+        "agentNum,k", po::value<int>()->default_value(0), "number of agents")(
+        "GUI,G", po::value<bool>()->default_value(true),"whether to turn on the graphical user interface")(
+        "sipp_suboptimality,w", po::value<double>()->default_value(1.0), "suboptimality factor for suboptimal sipp")(
+        "maxIterations,i", po::value<int>()->default_value(DEFAULT_MAX_ITER), "maximal number of iterations of LNS")(
+        "timeLimit,t", po::value<double>()->default_value(DEFAULT_TIME_LIMIT), "time limit to find the solution, in seconds")(
+        "sipp_implementation", po::value<std::string>()->default_value("SIPP_mine"),
+        "implementation of SIPP (SIPP_mine, SIPP_mapf_lns, SIPP_suboptimal)")(//set as default SIPP_mine, but can be changed to SIPP_suboptimal for suboptimal SIPP
+        "Restarts,r", po::value<bool>()->default_value(true),"restart the search if no feasible initial solution was found")(
+        "destroy_operator", po::value<std::string>()->default_value("RANDOM"),
+        "Destroy operator to be used in LNS (RANDOM, RANDOMWALK, INTERSECTION, ADAPTIVE, RANDOM_CHOOSE, BLOCKED)")(
+        "neighborhood_size,n", po::value<int>()->default_value(DEFAULT_NEIGHBORHOOD_SIZE),
+        "Size of the neighborhood used by the destroy operator (number of paths to be destroyed)")(
+        "seed,s", po::value<int>()->default_value(-1),
+        "seed of the random generators for reproducability, to achieve non reproducible random behavior, use negative value")(
+        "safetyCheck", po::value<bool>()->default_value(false), "Enable safety-aware LNS mode")(
+        "humanStartX", po::value<int>()->default_value(-1), "Human Start X coordinate")(
+        "humanStartY", po::value<int>()->default_value(-1), "Human Start Y coordinate")(
+        "doorX", po::value<int>()->default_value(-1), "Door X coordinate")(
+        "doorY", po::value<int>()->default_value(-1), "Door Y coordinate")(
+        "output_paths", po::value<std::string>()->default_value(""),
+        "Output file for the paths of the generated solution. If not used, the solution will not be exported.");
+
+    // Parse and validate command-line arguments
+    po::variables_map vm;
+    try
+    {
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
     }
-    // Handle missing arguments
-    std::cerr << "Error: " << ex.what() << "\n";
-    return 1;
-  }
+    catch (const po::error& ex)
+    {
+        // Handle --help
+        if (vm.count("help") != 0U)
+        {
+        std::cout << desc << std::endl;
+        return 0;
+        }
+        // Handle missing arguments
+        std::cerr << "Error: " << ex.what() << "\n";
+        return 1;
+    }
 
-  const std::string map_name          = vm["map"].as<std::string>();
-  const std::string scene_name        = vm["agents"].as<std::string>();
-  const std::string sipp_algo         = vm["sipp_implementation"].as<std::string>();
-  const std::string destroy_name      = vm["destroy_operator"].as<std::string>();
-  const std::string output_paths_file = vm["output_paths"].as<std::string>();
-  const int         neighborhood_size = vm["neighborhood_size"].as<int>();
-  const int         agent_num         = vm["agentNum"].as<int>();
-  const int         max_iter          = vm["maxIterations"].as<int>();
-  const double      time_limit        = vm["timeLimit"].as<double>();
-  const bool        GUI               = vm["GUI"].as<bool>();
-  const bool        restarts          = vm["Restarts"].as<bool>();
-  const double      w                 = vm["sipp_suboptimality"].as<double>();
-  const int         seed              = vm["seed"].as<int>();
+    const std::string map_name          = vm["map"].as<std::string>();
+    const std::string scene_name        = vm["agents"].as<std::string>();
+    const std::string sipp_algo         = vm["sipp_implementation"].as<std::string>();
+    const std::string destroy_name      = vm["destroy_operator"].as<std::string>();
+    const std::string output_paths_file = vm["output_paths"].as<std::string>();
+    const int         neighborhood_size = vm["neighborhood_size"].as<int>();
+    const int         agent_num         = vm["agentNum"].as<int>();
+    const int         max_iter          = vm["maxIterations"].as<int>();
+    const double      time_limit        = vm["timeLimit"].as<double>();
+    const bool        GUI               = vm["GUI"].as<bool>();
+    const bool        restarts          = vm["Restarts"].as<bool>();
+    const double      w                 = vm["sipp_suboptimality"].as<double>();
+    const int         seed              = vm["seed"].as<int>();
 
-  // Create the instance based on map and scene files
-  std::unique_ptr<Instance> instance = std::make_unique<Instance>(map_name, scene_name, agent_num);
+    // Create the instance based on map and scene files
+    std::unique_ptr<Instance> instance = std::make_unique<Instance>(map_name, scene_name, agent_num);
 
-  // Create the shared datastructure
-  std::unique_ptr<SharedData> shared_data = std::make_unique<SharedData>();
+    // Create the shared datastructure
+    std::unique_ptr<SharedData> shared_data = std::make_unique<SharedData>();
 
-  // Create the info type
-  INFO_type info_type = INFO_type::no_info;
-  if (GUI)
-  {
-    info_type = INFO_type::visualisation;
-  }
+    // Create the info type
+    INFO_type info_type = INFO_type::no_info;
+    if (GUI)
+    {
+        info_type = INFO_type::visualisation;
+    }
 
-  // Read sipp implementation ,default is SIPP_mine
-  SIPP_implementation sipp_implementation     = SIPP_implementation::SIPP_mine;
-  auto                sipp_implementation_opt = magic_enum::enum_cast<SIPP_implementation>(sipp_algo, magic_enum::case_insensitive);
-  if (sipp_implementation_opt.has_value())
-  {
-    sipp_implementation = sipp_implementation_opt.value();
-  }
-  else
-  {
-    std::cout << "WARNING: Unknown sipp implementation: '" << sipp_algo << "', using default option "
-              << magic_enum::enum_name(sipp_implementation) << std::endl;
-  }
-  // Read destroy operator, default is RANDOM
-  DESTROY_TYPE destroy_type     = DESTROY_TYPE::RANDOM;
-  auto         destroy_type_opt = magic_enum::enum_cast<DESTROY_TYPE>(destroy_name, magic_enum::case_insensitive);
-  if (destroy_type_opt.has_value())
-  {
-    destroy_type = destroy_type_opt.value();
-  }
-  else
-  {
-    std::cout << "WARNING: Unknown destroy type: '" << destroy_name << "', using default option " << magic_enum::enum_name(destroy_type)
-              << std::endl;
-  }
+    // Read sipp implementation ,default is SIPP_mine
+    SIPP_implementation sipp_implementation     = SIPP_implementation::SIPP_mine;
+    auto                sipp_implementation_opt = magic_enum::enum_cast<SIPP_implementation>(sipp_algo, magic_enum::case_insensitive);
+    if (sipp_implementation_opt.has_value())
+    {
+        sipp_implementation = sipp_implementation_opt.value();
+    }
+    else
+    {
+        std::cout << "WARNING: Unknown sipp implementation: '" << sipp_algo << "', using default option "
+                << magic_enum::enum_name(sipp_implementation) << std::endl;
+    }
+    // Read destroy operator, default is RANDOM
+    DESTROY_TYPE destroy_type     = DESTROY_TYPE::RANDOM;
+    auto         destroy_type_opt = magic_enum::enum_cast<DESTROY_TYPE>(destroy_name, magic_enum::case_insensitive);
+    if (destroy_type_opt.has_value())
+    {
+        destroy_type = destroy_type_opt.value();
+    }
+    else
+    {
+        std::cout << "WARNING: Unknown destroy type: '" << destroy_name << "', using default option " << magic_enum::enum_name(destroy_type)
+                << std::endl;
+    }
 
-  // Sanity check for neighborhood size
-  if (neighborhood_size < 1 || neighborhood_size > agent_num)
-  {
-    throw std::runtime_error("Invalid neighborhood size");
-  }
+    // Sanity check for neighborhood size
+    if (neighborhood_size < 1 || neighborhood_size > agent_num)
+    {
+        throw std::runtime_error("Invalid neighborhood size");
+    }
 
-  // Create SIPP settings agregation
-  SIPP_settings sipp_settings = SIPP_settings(sipp_implementation, info_type, w);
+    // Create SIPP settings agregation
+    SIPP_settings sipp_settings = SIPP_settings(sipp_implementation, info_type, w);
 
-  // Create destroy settings agregation
-  Destroy_settings destroy_settings = Destroy_settings(destroy_type, neighborhood_size);
+    // Create destroy settings agregation
+    Destroy_settings destroy_settings = Destroy_settings(destroy_type, neighborhood_size);
 
-  // Create LNS settings agregation
-  LNS_settings lns_settings = LNS_settings(max_iter, time_limit, destroy_settings, sipp_settings, restarts);
+    // Create LNS settings agregation
+    LNS_settings lns_settings = LNS_settings(max_iter, time_limit, destroy_settings, sipp_settings, restarts);
 
-  // Create the computation object
-  Computation computation(*instance, shared_data.get(), lns_settings, seed);
+    // Create the computation object
+    Computation computation(*instance, shared_data.get(), lns_settings, seed);
 
-  // Extraction of safety parameters
-  bool safety_aware = vm["safetyCheck"].as<bool>(); //If true, the safety-aware LNS mode is enabled
-  std::string human_file = vm["humanPath"].as<std::string>(); //If a user provides a human path file
-  int safety_door = vm["safetyDoor"].as<int>(); // If a user provides a safety door location
+    // Extraction of safety parameters
+    bool safety_aware = vm["safetyCheck"].as<bool>(); //If true, the safety-aware LNS mode is enabled
+    int final_safety_door = -1;
+    //int human_start_loc = -1;
 
-  // If a user provides a starting position, it is loaded from the terminal
-  int h_start_x = vm["humanStartX"].as<int>();
-  int h_start_y = vm["humanStartY"].as<int>();
-  int human_start_loc = -1;
-  // Try to find a human starting position in the map
-  int map_human_loc = instance->get_parsed_human_location();
+    if (safety_aware){
+        std::cout << ">>> SAFETY ALGORITMUS ZAPLÝ <<<" << std::endl;
+        // Try to find a position of a door in a map
+        int map_door_loc = instance->get_parsed_safety_door();
+        int door_x = vm["doorX"].as<int>();
+        int door_y = vm["doorY"].as<int>();
+        if (door_x != -1 && door_y != -1){ // if door position is in the terminal 
+            final_safety_door = instance->get_map_data().position_to_index(Point2d(door_x, door_y));
+            std::cout << ">>> POZICE DVEŘÍ ČTU Z TERMINÁLU: [" << door_x << ", " << door_y << "] <<<" << std::endl;
+        }
+        else if (map_door_loc != -1){// if == -1 there is door in a map
+            final_safety_door = map_door_loc;
+            auto pos = instance->location_to_position(final_safety_door);
+            std::cout << ">>> NAŠEL JSEM DVEŘE V MAPĚ NA TÉTO POZICI: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
+        } else{ // if there is a mistake of door placing
+            std::cout << ">>> POZOR: DVEŘE NEJSOU ANI V MAPĚ ANI V TERMINÁLU, GENERUJI NÁHODNĚ! <<<" << std::endl;
+            const auto& map_data = instance->get_map_data();
+            std::mt19937 gen_door;   
+            // Inicialization of generator
+            if (seed == -1) {
+                std::random_device rd;
+                gen_door.seed(rd());
+            } else {
+                gen_door.seed(seed + 99);
+            }
+            // Maping locations where are agents or their goals
+            std::unordered_set<int> robot_occupied_locs;
+            for (int loc : instance->get_start_locations()) robot_occupied_locs.insert(loc);
+            for (int loc : instance->get_goal_locations()) robot_occupied_locs.insert(loc);
+            int width = map_data.width;
+            int height = map_data.height;
+            std::vector<int> valid_edge_doors; // Ideal scenerio
+            std::vector<int> compromise_doors; // If is neccesary to make door in a wall 
+            // Loking for a free spots
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    bool is_edge = (x == 0 || x == width - 1 || y == 0 || y == height - 1);
+                    bool is_corner = ((x == 0 && y == 0) || (x == 0 && y == height - 1) ||
+                                    (x == width - 1 && y == 0) || (x == width - 1 && y == height - 1));
+                    
+                    if (is_edge && !is_corner) {
+                        int loc = y * width + x;
+                        if (map_data.data[loc] == 0  && loc != human_start_loc && robot_occupied_locs.find(loc) == robot_occupied_locs.end()) {
+                            valid_edge_doors.push_back(loc);
+                        } 
+                        else if (map_data.data[loc] == 1) { // If there are no free edges, find a wall
+                            int dirs[4] = {-width, width, -1, 1};
+                            for (int d : dirs) {
+                                // Not overfitting
+                                if (d == -1 && x == 0) continue;
+                                if (d == 1 && x == width - 1) continue;
+                                
+                                int n_loc = loc + d;
+                                if (n_loc >= 0 && n_loc < width * height) {
+                                    // Fitting space
+                                    if (map_data.data[n_loc] == 0 && robot_occupied_locs.find(n_loc) == robot_occupied_locs.end()) {
+                                        compromise_doors.push_back(n_loc);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (!valid_edge_doors.empty()) {
+                // Randomly pick a free spot
+                std::uniform_int_distribution<> dist_door(0, valid_edge_doors.size() - 1);
+                final_safety_door = valid_edge_doors[dist_door(gen_door)];  
+                auto pos = instance->location_to_position(final_safety_door);
+                std::cout << ">>> NÁHODNÉ DVEŘE VYTVOŘENY NA OKRAJI: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
+            } else if (!compromise_doors.empty()) {
+                // Randomly pick a wall spot as a door
+                std::uniform_int_distribution<> dist_door(0, compromise_doors.size() - 1);
+                final_safety_door = compromise_doors[dist_door(gen_door)];
+                auto pos = instance->location_to_position(final_safety_door);
+                std::cout << ">>> NÁHODNÉ KOMPROMISNÍ DVEŘE VYTVOŘENY U ZDI NA OKRAJI: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
+            } else {
+                // Not able to have doors on the edge
+                std::cerr << "WARNING: Okraje jsou neprůchodné! Hledám libovolné volné místo uvnitř mapy..." << std::endl;
+                std::uniform_int_distribution<> dist_map(0, map_data.data.size() - 1);
+                int max_attempts = 10000;
+                bool door_found = false;
+                
+                for (int i = 0; i < max_attempts; i++) {
+                    int candidate_loc = dist_map(gen_door);
+                    // Cant be placed on robot or goal
+                    if (map_data.data[candidate_loc] == 0 && robot_occupied_locs.find(candidate_loc) == robot_occupied_locs.end()) {
+                        final_safety_door = candidate_loc;
+                        door_found = true;
+                        auto pos = instance->location_to_position(final_safety_door);
+                        std::cout << ">>> NÁHODNÉ DVEŘE VYTVOŘENY UVNITŘ MAPY: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
+                        break;
+                    }
+                }
+                if (!door_found) {
+                    std::cerr << "ERROR: Nepodařilo se vygenerovat validní pozici dveří!" << std::endl;
+                }
+            }
+        }
+    }
 
-  if (map_human_loc != -1) {
-      human_start_loc = map_human_loc;
-      auto pos = instance->location_to_position(human_start_loc);
-      std::cout << "Human spawn loaded directly from the .map file at: [" << pos.x << ", " << pos.y << "]" << std::endl;
-  }
+    shared_data->human_start_location = human_start_loc;
+    shared_data->safety_door_location = final_safety_door;
+    computation.set_safety_params(safety_aware, human_start_loc, final_safety_door);
+
+
+
+
+    // If a user provides a starting position, it is loaded from the terminal
+    int h_start_x = vm["humanStartX"].as<int>();
+    int h_start_y = vm["humanStartY"].as<int>();
+    // Try to find a human starting position in the map
+    int map_human_loc = instance->get_parsed_human_location();
+
+    if (h_start_x != -1 && h_start_y != -1) {
+          human_start_loc = instance->get_map_data().position_to_index(Point2d(h_start_x, h_start_y));
+          std::cout << "Human spawn loaded from terminal arguments." << std::endl;
+      }
+
+    else if (map_human_loc != -1) {
+        human_start_loc = map_human_loc;
+        auto pos = instance->location_to_position(human_start_loc);
+        std::cout << "Human spawn loaded directly from the .map file at: [" << pos.x << ", " << pos.y << "]" << std::endl;
+    }
   // If a starting position is not provided, it is generated randomly or directly from the terminal input
   else if (h_start_x != -1 && h_start_y != -1) {
     // Ensuring that the position is inside the map
@@ -325,6 +437,13 @@ auto main(int argc, char** argv) -> int
     shared_data->safety_door_location = safety_door;
     computation.set_safety_params(safety_aware, human_start_loc, safety_door);
 
+
+
+
+
+
+
+    
     // start the computation thread
     computation.start();
 

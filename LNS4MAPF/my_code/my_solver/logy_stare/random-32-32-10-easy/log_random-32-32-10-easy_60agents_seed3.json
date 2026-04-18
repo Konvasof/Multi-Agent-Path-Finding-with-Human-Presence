@@ -1,0 +1,23 @@
+{
+    "experiment": {
+        "agents": 60,
+        "destroy_operator": "RANDOM",
+        "map": "../../MAPF-benchmark/mapf-map/random-32-32-10-easy.map",
+        "max_iterations": 100000000,
+        "scenario": "../../MAPF-benchmark/mapf-scen-even/scen-even/random-32-32-10-even-1.scen",
+        "seed": 3,
+        "sipp_algo": "SIPP_mine",
+        "time_limit": 60.0
+    },
+    "results": {
+        "feasible": true,
+        "makespan": 46,
+        "sum_of_costs": 1351,
+        "sum_of_delays": 11
+    },
+    "safety": {
+        "enabled": true,
+        "human_start_loc": 662,
+        "safety_door_loc": 1003
+    }
+}

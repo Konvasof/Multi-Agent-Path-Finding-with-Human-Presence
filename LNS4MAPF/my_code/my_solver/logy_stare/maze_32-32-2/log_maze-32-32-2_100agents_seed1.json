@@ -1,0 +1,21 @@
+{
+    "experiment": {
+        "agents": 100,
+        "destroy_operator": "RANDOM",
+        "map": "../../MAPF-benchmark/mapf-map/maze-32-32-2.map",
+        "max_iterations": 100,
+        "scenario": "../../MAPF-benchmark/mapf-scen-even/scen-even/maze-32-32-2-even-1.scen",
+        "seed": 1,
+        "sipp_algo": "SIPP_mine",
+        "time_limit": 30.0
+    },
+    "results": {
+        "feasible": false,
+        "sum_of_costs": -1
+    },
+    "safety": {
+        "enabled": true,
+        "human_start_loc": 836,
+        "safety_door_loc": 479
+    }
+}
