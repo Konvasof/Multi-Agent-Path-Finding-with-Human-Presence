@@ -4,6 +4,7 @@
 #include <fstream> 
 #include <iomanip>
 #include <nlohmann/json.hpp>
+#include <filesystem>
 
 #include "Computation.h"
 #include "Instance.h"
@@ -360,61 +361,67 @@ auto main(int argc, char** argv) -> int
         sol.save(output_paths_file, *instance);
     }
   
-  // Logging the results to a JSON file
-  const Solution& sol = computation.get_solution();
-  json result;
+    // Logging the results to a JSON file
+    const Solution& sol = computation.get_solution();
+    json result;
 
-  // Gain metadata
-  result["experiment"]["map"] = map_name;
-  result["experiment"]["scenario"] = scene_name;
-  result["experiment"]["agents"] = agent_num;
-  result["experiment"]["time_limit"] = time_limit;
-  result["experiment"]["max_iterations"] = max_iter;
-  result["experiment"]["seed"] = seed;
-  result["experiment"]["sipp_algo"] = sipp_algo;
-  result["experiment"]["destroy_operator"] = destroy_name;
+    // Gain metadata
+    result["experiment"]["map"] = map_name;
+    result["experiment"]["scenario"] = scene_name;
+    result["experiment"]["agents"] = agent_num;
+    result["experiment"]["time_limit"] = time_limit;
+    result["experiment"]["max_iterations"] = max_iter;
+    result["experiment"]["seed"] = seed;
+    result["experiment"]["sipp_algo"] = sipp_algo;
+    result["experiment"]["destroy_operator"] = destroy_name;
 
-  // Safety parameters
-  result["safety"]["enabled"] = safety_aware;
-  result["safety"]["human_start_loc"] = human_start_loc;
-  result["safety"]["human_origin"] = human_origin;
-  result["safety"]["safety_door_loc"] = final_safety_door;
-  result["safety"]["door_origin"] = door_origin;
+    // Safety parameters
+    result["safety"]["enabled"] = safety_aware;
+    result["safety"]["human_start_loc"] = human_start_loc;
+    result["safety"]["human_origin"] = human_origin;
+    result["safety"]["safety_door_loc"] = final_safety_door;
+    result["safety"]["door_origin"] = door_origin;
 
-  // Results
-  result["results"]["feasible"] = sol.feasible;
+    // Results
+    result["results"]["feasible"] = sol.feasible;
+    
+    if (sol.feasible) {
+        result["results"]["sum_of_costs"] = sol.sum_of_costs;
+        result["results"]["makespan"] = sol.makespan;
+        result["results"]["sum_of_delays"] = sol.sum_of_delays;
+    } else {
+        result["results"]["sum_of_costs"] = -1;
+    }
+
+    // Name of the map
+    std::filesystem::path p(map_name);
+    std::string clean_map_name = p.stem().string(); 
   
-  if (sol.feasible) {
-      result["results"]["sum_of_costs"] = sol.sum_of_costs;
-      result["results"]["makespan"] = sol.makespan;
-      result["results"]["sum_of_delays"] = sol.sum_of_delays;
-  } else {
-      result["results"]["sum_of_costs"] = -1;
-  }
+    std::string log_filename = "log_" + clean_map_name + "_" + std::to_string(agent_num) + "agents_seed" + std::to_string(seed) + ".json";
+    std::filesystem::path log_dir = std::filesystem::path("logs") / clean_map_name;
+    std::filesystem::path full_log_path = log_dir / log_filename;
 
-  // Name of the map
-  std::filesystem::path p(map_name);
-  std::string clean_map_name = p.stem().string(); 
-  
-  std::string log_filename = "log_" + clean_map_name + "_" + std::to_string(agent_num) + "agents_seed" + std::to_string(seed) + ".json";
+    // Writing the JSON
+    if (!std::filesystem::exists(log_dir)) {
+        std::filesystem::create_directories(log_dir);
+    }
 
-  // Writing the JSON
-  std::ofstream out_file(log_filename);
-  if (out_file.is_open()) {
-      out_file << std::setw(4) << result << std::endl;
-      out_file.close();
-      std::cout << "\nZáznam o experimentu úspěšně uložen do: " << log_filename << " <<<" << std::endl;
-  } else {
-      std::cerr << "ERROR: Nepodařilo se vytvořit logovací soubor: " << log_filename << std::endl;
-  }
-  // zavolam ze sol cenu a feasible a meta data( jmeno instance, casovy limit, jmeno mapy atd..)
-  // volam s novou cestou souboru kam se mi ulozi kazdy tenhle kolobeh
-  // na konci mainu soubor, kam tohle vsechno ulozim - json soubor z kazdeho exporimnetu 
-  // yaml nebo csv
-  // knihovna nlohmann/json 
-  // zadefinuju nlohmannjson results objekt a pak tam vkladam data result["cost"]= 1234
-  // result.save(path)
-  // kouknout se na to, co se deje když to není feasible, kdyz najdu reseni, neni dobry a jdu na dalsi reseni, koukni na to.
-  // over ze mi dobre funguje to reseni LNS a ze to dobre prohledava 
+    std::ofstream out_file(full_log_path);
+    if (out_file.is_open()) {
+        out_file << std::setw(4) << result << std::endl;
+        out_file.close();
+        std::cout << "\nZáznam o experimentu úspěšně uložen do: " << full_log_path << " <<<" << std::endl;
+    } else {
+        std::cerr << "ERROR: Nepodařilo se vytvořit logovací soubor: " << full_log_path << std::endl;
+    }
+    // zavolam ze sol cenu a feasible a meta data( jmeno instance, casovy limit, jmeno mapy atd..)
+    // volam s novou cestou souboru kam se mi ulozi kazdy tenhle kolobeh
+    // na konci mainu soubor, kam tohle vsechno ulozim - json soubor z kazdeho exporimnetu 
+    // yaml nebo csv
+    // knihovna nlohmann/json 
+    // zadefinuju nlohmannjson results objekt a pak tam vkladam data result["cost"]= 1234
+    // result.save(path)
+    // kouknout se na to, co se deje když to není feasible, kdyz najdu reseni, neni dobry a jdu na dalsi reseni, koukni na to.
+    // over ze mi dobre funguje to reseni LNS a ze to dobre prohledava 
     return EXIT_SUCCESS;
 }
