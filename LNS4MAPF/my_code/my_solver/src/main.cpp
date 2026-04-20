@@ -144,22 +144,102 @@ auto main(int argc, char** argv) -> int
 
     // Extraction of safety parameters
     bool safety_aware = vm["safetyCheck"].as<bool>(); //If true, the safety-aware LNS mode is enabled
+    int human_start_loc = -1; //Starting location of the human 
     int final_safety_door = -1;
-    //int human_start_loc = -1;
+    std::string human_origin = "none";
+    std::string door_origin = "none";
 
-    if (safety_aware){
+    // Terminal inputs
+    if (safety_aware) {
         std::cout << ">>> SAFETY ALGORITMUS ZAPLÝ <<<" << std::endl;
-        // Try to find a position of a door in a map
+        int h_start_x = vm["humanStartX"].as<int>();
+        int h_start_y = vm["humanStartY"].as<int>();
+        // Checking terminal inputs for human start and loading it if possible
+        if (h_start_x != -1 && h_start_y != -1) {
+            if (instance->get_map_data().is_in({h_start_x, h_start_y})) {
+                int candidate = instance->position_to_location({h_start_x, h_start_y});
+                const auto& starts = instance->get_start_locations();
+                bool robot_collision = std::find(starts.begin(), starts.end(), candidate) != starts.end(); 
+                // If is the human start position valid
+                if (instance->get_map_data().data[candidate] == 0 && !robot_collision) {
+                    human_start_loc = candidate;
+                    human_origin = "terminal";
+                    std::cout << ">>> START ČLOVĚKA NAČETLÝ Z TERMINÁLU: [" << h_start_x << ", " << h_start_y << "] <<<" << std::endl;
+                } else {
+                    std::cout << ">>> POZOR: POZICE ČLOVĚKA V TERMINÁLU JE NEPLATNÁ (ZEĎ/ROBOT)! <<<" << std::endl;
+                }
+            }
+        }
+        // If the human start location is still not defined, try to load it from the map file
+        if (human_start_loc == -1) {
+            int map_human_loc = instance->get_parsed_human_location();
+            if (map_human_loc != -1) {
+                human_start_loc = map_human_loc;
+                auto pos = instance->location_to_position(human_start_loc);
+                human_origin = "map";
+                std::cout << ">>> POČÁTEČNÍ POZICE ČLOVĚKA Z MAPY: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
+            }
+        }
+        // If the human start location is still not defined, generate a random one
+        if (human_start_loc == -1) {
+            std::cout << ">>> GENERUJI NÁHODNOU POZICI ČLOVĚKA... <<<" << std::endl;
+            std::mt19937 gen(seed == -1 ? std::random_device{}() : seed + 42);
+            const auto& map_data = instance->get_map_data();
+            const auto& agent_starts = instance->get_start_locations();
+            std::unordered_set<int> blocked(agent_starts.begin(), agent_starts.end());
+            std::uniform_int_distribution<> dist(0, map_data.data.size() - 1);
+
+            for (int i = 0; i < 10000; ++i) {
+                int candidate = dist(gen);
+                if (map_data.data[candidate] == 0 && blocked.find(candidate) == blocked.end()) {
+                    human_start_loc = candidate;
+                    auto pos = instance->location_to_position(human_start_loc);
+                    human_origin = "random";
+                    std::cout << ">>> NÁHODNĚ GENEROVANÁ POZICE ČLOVĚKA: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
+                    break;
+                }
+            }
+        }
+        // If the human start location is still not defined, generate a random one
+        if (human_start_loc == -1) {
+            std::cout << ">>> GENERUJI NÁHODNOU POZICI ČLOVĚKA... <<<" << std::endl;
+            std::mt19937 gen(seed == -1 ? std::random_device{}() : seed + 42);
+            const auto& map_data = instance->get_map_data();
+            const auto& agent_starts = instance->get_start_locations();
+            std::unordered_set<int> blocked(agent_starts.begin(), agent_starts.end());
+            std::uniform_int_distribution<> dist(0, map_data.data.size() - 1);
+
+            for (int i = 0; i < 10000; ++i) {
+                int candidate = dist(gen);
+                if (map_data.data[candidate] == 0 && blocked.find(candidate) == blocked.end()) {
+                    human_start_loc = candidate;
+                    auto pos = instance->location_to_position(human_start_loc);
+                    human_origin = "random";
+                    std::cout << ">>> NÁHODNĚ GENEROVANÁ POZICE ČLOVĚKA: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
+                    break;
+                }
+            }
+        }
+        // Safety door generation
         int map_door_loc = instance->get_parsed_safety_door();
         int door_x = vm["doorX"].as<int>();
         int door_y = vm["doorY"].as<int>();
-        if (door_x != -1 && door_y != -1){ // if door position is in the terminal 
-            final_safety_door = instance->get_map_data().position_to_index(Point2d(door_x, door_y));
-            std::cout << ">>> POZICE DVEŘÍ ČTU Z TERMINÁLU: [" << door_x << ", " << door_y << "] <<<" << std::endl;
-        }
-        else if (map_door_loc != -1){// if == -1 there is door in a map
+        // if door position is in the terminal 
+        if (door_x != -1 && door_y != -1){ 
+            if (instance->get_map_data().is_in({door_x, door_y})) {
+                int candidate_door = instance->get_map_data().position_to_index(Point2d(door_x, door_y));
+                if (instance->get_map_data().data[candidate_door] == 0) {
+                    final_safety_door = candidate_door;
+                    door_origin = "terminal";
+                    std::cout << ">>> POZICE DVEŘÍ ČTU Z TERMINÁLU: [" << door_x << ", " << door_y << "] <<<" << std::endl;
+                }
+            } else {
+                std::cout << ">>> POZOR: POZICE DVEŘÍ V TERMINÁLU JE MIMO MAPU, IGNORUJI! <<<" << std::endl;
+            }
+        } else if (map_door_loc != -1){// if == -1 there is door in a map
             final_safety_door = map_door_loc;
             auto pos = instance->location_to_position(final_safety_door);
+            door_origin = "map";
             std::cout << ">>> NAŠEL JSEM DVEŘE V MAPĚ NA TÉTO POZICI: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
         } else{ // if there is a mistake of door placing
             std::cout << ">>> POZOR: DVEŘE NEJSOU ANI V MAPĚ ANI V TERMINÁLU, GENERUJI NÁHODNĚ! <<<" << std::endl;
@@ -216,16 +296,18 @@ auto main(int argc, char** argv) -> int
                 std::uniform_int_distribution<> dist_door(0, valid_edge_doors.size() - 1);
                 final_safety_door = valid_edge_doors[dist_door(gen_door)];  
                 auto pos = instance->location_to_position(final_safety_door);
+                door_origin = "random_edge";
                 std::cout << ">>> NÁHODNÉ DVEŘE VYTVOŘENY NA OKRAJI: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
             } else if (!compromise_doors.empty()) {
                 // Randomly pick a wall spot as a door
                 std::uniform_int_distribution<> dist_door(0, compromise_doors.size() - 1);
                 final_safety_door = compromise_doors[dist_door(gen_door)];
                 auto pos = instance->location_to_position(final_safety_door);
+                door_origin = "random_edge";
                 std::cout << ">>> NÁHODNÉ KOMPROMISNÍ DVEŘE VYTVOŘENY U ZDI NA OKRAJI: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
             } else {
                 // Not able to have doors on the edge
-                std::cerr << "WARNING: Okraje jsou neprůchodné! Hledám libovolné volné místo uvnitř mapy..." << std::endl;
+                std::cerr << ">>> POZOR: OKRAJE JSOU NEPRŮCHODNÉ! HLEDÁM LIBOVOLNÉ VOLNÉ MÍSTO UVNITŘ MAPY... <<<" << std::endl;
                 std::uniform_int_distribution<> dist_map(0, map_data.data.size() - 1);
                 int max_attempts = 10000;
                 bool door_found = false;
@@ -237,213 +319,22 @@ auto main(int argc, char** argv) -> int
                         final_safety_door = candidate_loc;
                         door_found = true;
                         auto pos = instance->location_to_position(final_safety_door);
+                        door_origin = "random_compromise";
                         std::cout << ">>> NÁHODNÉ DVEŘE VYTVOŘENY UVNITŘ MAPY: [" << pos.x << ", " << pos.y << "] <<<" << std::endl;
                         break;
                     }
                 }
                 if (!door_found) {
-                    std::cerr << "ERROR: Nepodařilo se vygenerovat validní pozici dveří!" << std::endl;
+                    std::cerr << ">>>ERROR: NEPODARILO SE VYGENEROVAT VALIDNI POZICI DVEŘÍ! <<<" << std::endl;
                 }
             }
-        }
+        }       
     }
-
+    // Save the safety parameters to the shared data and computation object
     shared_data->human_start_location = human_start_loc;
     shared_data->safety_door_location = final_safety_door;
     computation.set_safety_params(safety_aware, human_start_loc, final_safety_door);
 
-
-
-
-    // If a user provides a starting position, it is loaded from the terminal
-    int h_start_x = vm["humanStartX"].as<int>();
-    int h_start_y = vm["humanStartY"].as<int>();
-    // Try to find a human starting position in the map
-    int map_human_loc = instance->get_parsed_human_location();
-
-    if (h_start_x != -1 && h_start_y != -1) {
-          human_start_loc = instance->get_map_data().position_to_index(Point2d(h_start_x, h_start_y));
-          std::cout << "Human spawn loaded from terminal arguments." << std::endl;
-      }
-
-    else if (map_human_loc != -1) {
-        human_start_loc = map_human_loc;
-        auto pos = instance->location_to_position(human_start_loc);
-        std::cout << "Human spawn loaded directly from the .map file at: [" << pos.x << ", " << pos.y << "]" << std::endl;
-    }
-  // If a starting position is not provided, it is generated randomly or directly from the terminal input
-  else if (h_start_x != -1 && h_start_y != -1) {
-    // Ensuring that the position is inside the map
-    if (instance->get_map_data().is_in({h_start_x, h_start_y})) {
-        int candidate_loc = instance->position_to_location({h_start_x, h_start_y});
-        // Ensuring the user does not send the person into a blocked area
-        if (instance->get_map_data().data[candidate_loc] != 0) {
-            std::cout << "WARNING: Terminal human start is on an obstacle! Falling back to random choice." << std::endl;
-        }
-        else {
-            bool collision_with_robot = false;
-            for (int robot_loc : instance->get_start_locations()) {
-                if (robot_loc == candidate_loc) {
-                    collision_with_robot = true;
-                    break;
-                }
-            }
-            if (collision_with_robot) {
-                  std::cout << "WARNING: Terminal human start is on a robot! Falling back to random choice." << std::endl;
-            } 
-            else {
-                  human_start_loc = candidate_loc;
-                  std::cout << "Human spawn loaded from terminal arguments at: [" << h_start_x << ", " << h_start_y << "]" << std::endl;
-            }
-        }
-    }
-    else {
-          std::cout << "WARNING: Terminal coordinates are out of map bounds! Falling back to random choice." << std::endl;
-    }
-  }       
-  // If it's neccesary to make a random position
-  if (human_start_loc == -1) {
-      std::cout << "Generating a random human position..." << std::endl;
-      
-      // Keep a seed 
-      std::mt19937 gen;
-      if (seed == -1) {
-          std::random_device rd;
-          gen.seed(rd());
-      } else {
-          gen.seed(seed + 42); // Not same seed as for agents
-      }
-
-      const auto& map_data = instance->get_map_data();
-      std::uniform_int_distribution<> dist(0, map_data.data.size() - 1);
-      
-      const auto& agent_starts = instance->get_start_locations();
-      std::unordered_set<int> agent_start_set(agent_starts.begin(), agent_starts.end());
-
-      int max_attempts = 10000;
-      bool position_found = false;
-
-      // Iterating throught a map
-      for (int i = 0; i < max_attempts; i++) {
-          int candidate_loc = dist(gen);
-          // Not same as a wall or door
-          if (map_data.data[candidate_loc] == 0 && agent_start_set.find(candidate_loc) == agent_start_set.end()) {
-            human_start_loc = candidate_loc;
-            position_found = true;                 
-            auto pos = instance->location_to_position(human_start_loc);
-            std::cout << "Human spawn randomly set to: [" << pos.x << ", " << pos.y << "] (Location ID: " << human_start_loc << ")" << std::endl;
-            break;
-              
-          }
-      }
-      if (!position_found) {
-          std::cerr << "ERROR: Failed to generate valid human position after " << max_attempts << " attempts." << std::endl;
-      }
-    }
-
-    int map_door_loc = instance->get_parsed_safety_door();
-    
-    if (map_door_loc != -1) {
-        safety_door = map_door_loc;
-        auto pos = instance->location_to_position(safety_door);
-        std::cout << "Safety door loaded directly from the .map file at: [" << pos.x << ", " << pos.y << "]" << std::endl;
-    } else if (safety_door == -1) {
-        // 2. Fallback: No '2' found in the map, generate a random door on the edge
-        std::cout << "No doors found. Generating a random door position on the edge..." << std::endl;
-        const auto& map_data = instance->get_map_data();
-        std::mt19937 gen_door;
-        if (seed == -1) {
-            std::random_device rd;
-            gen_door.seed(rd());
-        } else {
-            gen_door.seed(seed + 99);
-        }
-    
-        std::unordered_set<int> robot_occupied_locs;
-        for (int loc : instance->get_start_locations()) robot_occupied_locs.insert(loc);
-        for (int loc : instance->get_goal_locations()) robot_occupied_locs.insert(loc);
-
-        int width = map_data.width;
-        int height = map_data.height;
-        std::vector<int> valid_edge_doors;
-
-        // Find all cells that are on the edge, not in the corners, and are free (0)
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                bool is_edge = (x == 0 || x == width - 1 || y == 0 || y == height - 1);
-                bool is_corner = ((x == 0 && y == 0) || (x == 0 && y == height - 1) ||
-                                (x == width - 1 && y == 0) || (x == width - 1 && y == height - 1));
-                
-                if (is_edge && !is_corner) {
-                    int loc = y * width + x;
-                    // Must be free space (0) and not the human's start location
-                    if (map_data.data[loc] == 0 && loc != human_start_loc && robot_occupied_locs.find(loc) == robot_occupied_locs.end()) {
-                        valid_edge_doors.push_back(loc);
-                    }
-                }
-            }
-        }
-
-        if (!valid_edge_doors.empty()) {
-            // Pick a random door from the valid edge locations
-            std::uniform_int_distribution<> dist_door(0, valid_edge_doors.size() - 1);
-            safety_door = valid_edge_doors[dist_door(gen_door)];
-            
-            auto pos = instance->location_to_position(safety_door);
-            std::cout << "Random edge safety door generated at: [" << pos.x << ", " << pos.y << "] (Location ID: " << safety_door << ")" << std::endl;
-        } else {
-            // Ultimate fallback in case the map is completely closed off by walls on all edges
-            std::cerr << "WARNING: No free edge locations found! Falling back to any free space..." << std::endl;
-            std::uniform_int_distribution<> dist_map(0, map_data.data.size() - 1);
-            int max_attempts = 10000;
-            bool door_found = false;
-            for (int i = 0; i < max_attempts; i++) {
-                int candidate_loc = dist_map(gen_door);
-                if (map_data.data[candidate_loc] == 0 && candidate_loc != human_start_loc) {
-                    safety_door = candidate_loc;
-                    door_found = true;
-                    auto pos = instance->location_to_position(safety_door);
-                    std::cout << "Random fallback safety door generated at: [" << pos.x << ", " << pos.y << "] (Location ID: " << safety_door << ")" << std::endl;
-                    break;
-                }
-            }
-            if (!door_found) {
-                std::cerr << "ERROR: Failed to generate valid door position!" << std::endl;
-            }
-        }
-    }
-   
-    std::vector<int> human_path_locs;
-    if (!human_file.empty())
-    {
-        std::ifstream hf(human_file);
-        if (hf.is_open())
-        {
-            int x, y;
-            while (hf >> x >> y)
-            {
-                if (instance->get_map_data().is_in({x, y}))
-                {
-                    // Převedeme souřadnice (x,y) na Location ID
-                    human_path_locs.push_back(instance->position_to_location({x, y}));
-                }
-            }
-        }
-        else
-        {
-            std::cout << "WARNING: Could not open human path file: " << human_file << std::endl;
-        }
-    }
-    shared_data->safety_door_location = safety_door;
-    computation.set_safety_params(safety_aware, human_start_loc, safety_door);
-
-
-
-
-
-
-
-    
     // start the computation thread
     computation.start();
 
@@ -486,7 +377,9 @@ auto main(int argc, char** argv) -> int
   // Safety parameters
   result["safety"]["enabled"] = safety_aware;
   result["safety"]["human_start_loc"] = human_start_loc;
-  result["safety"]["safety_door_loc"] = safety_door;
+  result["safety"]["human_origin"] = human_origin;
+  result["safety"]["safety_door_loc"] = final_safety_door;
+  result["safety"]["door_origin"] = door_origin;
 
   // Results
   result["results"]["feasible"] = sol.feasible;

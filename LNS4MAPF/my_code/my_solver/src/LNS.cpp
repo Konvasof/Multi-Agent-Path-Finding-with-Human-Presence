@@ -239,7 +239,7 @@ void LNS::solve()
       }
     }
     
-    if (iteration_num % 100 == 0) {
+    if (iteration_num % 1000 == 0) {
         std::cout << "  [Progres] Zpracována iterace " << iteration_num << " / " << settings.max_iter  << " | Aktuální nejlepší cost: " << solution.sum_of_costs << std::endl;
     }
 

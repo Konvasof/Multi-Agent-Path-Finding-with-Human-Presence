@@ -1,6 +1,6 @@
 #!/bin/bash
 
-Type_of_map=Room-32-32-4
+Type_of_map=warehouse-10-20-10-2-1
 Even_or_odd=even
 Number_of_scenario=1
 

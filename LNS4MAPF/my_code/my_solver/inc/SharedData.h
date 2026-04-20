@@ -1,10 +1,3 @@
-/**
- * @file
- * @brief Data shared between computation and visualization thread.
- *
- * @author: Jan Chleboun <chlebja3@fel.cvut.cz>
- * @date: 20-02-2025
- */
 #pragma once
 #include <atomic>
 #include <mutex>
@@ -24,6 +17,7 @@ public:
   std::vector<int> human_path_locations;         /**< Saved human path */
   std::atomic<bool> human_path_ready{false};     /**< Flag, if is a path ready to be read by visualization thread */
   std::vector<std::vector<int>> all_time_human_paths; /**< Saved human paths for all iterations, used for evaluation */
+  int human_start_location = -1; /**< Location ID of the human start position */
   int safety_door_location = -1; /**< Location ID of the safety door */
   
   /**

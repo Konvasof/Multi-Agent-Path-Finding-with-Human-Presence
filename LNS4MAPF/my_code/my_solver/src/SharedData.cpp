@@ -1,9 +1,3 @@
-/*
- * Author: Jan Chleboun
- * Date: 20-02-2025
- * Email: chlebja3@fel.cvut.cz
- * Description:
- */
 #include "SharedData.h"
 
 #include <iostream>
